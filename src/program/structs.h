@@ -12,12 +12,28 @@ struct PlantCoord
 {
     int gpx;
     int gpy;
-};
 
-struct PoisonousPlantCoord
-{
+                    /* poisonous plant part */
+
     int gppx;
     int gppy;
+};
+
+struct SpaceCoords
+{
+    int gwspace = 10;
+    int ghspace = 10;
+};
+
+struct MooshroomCoord
+{
+    int gmfx;
+    int gmfy;
+
+                    /* poisonous mooshroom part */
+
+    int gmpx;
+    int gmpy;
 };
 
 #endif

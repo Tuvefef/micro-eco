@@ -4,11 +4,12 @@
 #include <cstdlib>
 #include "structs.h"
 
-class Plant
+class Plants
 {
     public:
-        void spawnPlant(CreatureCoord& crtr, PlantCoord& plant0);
-        void spawnPoisonousPlant(CreatureCoord& crtr, PlantCoord& plant0, PoisonousPlantCoord& pplant);
+        virtual void spawnPlants(CreatureCoord& crtr, PlantCoord& plant, SpaceCoords& space) = 0;
+        virtual void eatPlants(CreatureCoord& crtr, PlantCoord& plant, SpaceCoords& space) = 0;
+        virtual ~Plants() = default;
 };
 
 #endif

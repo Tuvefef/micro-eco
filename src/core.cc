@@ -9,7 +9,10 @@
 
 #include "program/consoleFormat.h"
 #include "program/creature.h"
-#include "program/plants.h"
+#include "program/splants.h"
+#include "program/pplants.h"
+#include "program/smoosh.h"
+#include "program/pmoosh.h"
 #include "program/structs.h"
 #include "program/sysmath.h"
 
@@ -37,22 +40,26 @@ char getInput()
     return x;
 }
 
-void renderWord(Consoleformat& csys, CreatureCoord& crtr, CreatureCoord& npc, PlantCoord& plant, PoisonousPlantCoord& pplant, CreatureCoord& predator)
+void renderWord(Consoleformat& csys, CreatureCoord& crtr, CreatureCoord& npc, PlantCoord& plant, CreatureCoord& predator, SpaceCoords& space, PoisonousMoosh& pmoosh, SafeMoosh& smoosh, MooshroomCoord& moosh0, MooshroomCoord& moosh1)
 {
-    for(int i0 = 0; i0 < gh0; i0++)
+    for(int i0 = 0; i0 < space.ghspace; i0++)
     {
-        for(int e0 = 0; e0 < gw0; e0++)
+        for(int e0 = 0; e0 < space.gwspace; e0++)
         {
             if(e0 == crtr.gposx && i0 == crtr.gposy)
                 std::cout << csys.blue() << "i " << csys.reset() << std::flush;
             else if(e0 == plant.gpx && i0 == plant.gpy)
                 std::cout << csys.cyan() << "* " << csys.reset() << std::flush;
-            else if(e0 == pplant.gppx && i0 == pplant.gppy)
-                std::cout << csys.purple() << "x " << csys.reset() << std::flush;
+            else if(e0 == plant.gppx && i0 == plant.gppy)
+                std::cout << csys.purple() << "* " << csys.reset() << std::flush;
             else if(e0 == npc.gposx && i0 == npc.gposy)
                 std::cout << csys.yellow() << "~ " << csys.reset() << std::flush;
             else if(e0 == predator.gposx && i0 == predator.gposy)
                 std::cout << csys.red() << "! " << csys.reset() << std::flush;
+            else if(e0 == moosh0.gmfx && i0 == moosh0.gmfy)
+                std::cout << csys.yellow() << "m " << csys.reset() << std::flush;
+            else if(e0 == moosh1.gmpx && i0 == moosh1.gmpy)
+                std::cout << csys.purple() << "m " << csys.reset() << std::flush;
             else
                 std::cout << csys.green() << ". " << csys.reset() << std::flush;
         }
@@ -65,13 +72,20 @@ int main()
     //class instance
     Consoleformat csys;
     RenderCreature creature;
+    SafeMoosh smoosh;
+    PoisonousMoosh pmoosh;
+
+    EdiblePlant edplant;
+    PoisonousPlant pplant;
 
     //struct instances
     CreatureCoord crtr;
     CreatureCoord npc;
     CreatureCoord predator;
     PlantCoord plant;
-    PoisonousPlantCoord pplant;
+    SpaceCoords space;
+    MooshroomCoord moosh0;
+    MooshroomCoord moosh1;
 
     std::cout << csys.consoleclear();
     std::cout << "Welcome to the eco sim!\n";
@@ -82,15 +96,17 @@ int main()
 
     srand(time(nullptr));
 
-    crtr.gposx = gw0 / 2;
-    crtr.gposy = gh0 / 2;
+    crtr.gposx = space.gwspace / 2;
+    crtr.gposy = space.ghspace / 2;
     crtr.genergy = defEnergy;
 
-    creature.spawnPrey(npc, crtr);
+    creature.spawnPrey(npc, crtr, space);
 
-    Plant plant0;
-    plant0.spawnPlant(crtr, plant);
-    plant0.spawnPoisonousPlant(crtr, plant, pplant);
+    edplant.spawnPlants(crtr, plant, space);
+    pplant.spawnPlants(crtr, plant, space);
+    
+    pmoosh.spawnMoosh(moosh1, crtr, space);
+    smoosh.spawnMoosh(moosh0, crtr, space);
 
     for(int gtck = 0; gtck < gTicks; gtck++)
     {
@@ -99,20 +115,25 @@ int main()
 
         std::cout << "energy: " << crtr.genergy << "\n";
 
-        renderWord(csys, crtr, npc, plant, pplant, predator);
-        creature.renderPlayermove(crtr, plant0, plant, pplant, getInput());
-        creature.creatureEatPlant(crtr, plant0, plant, pplant);
+        renderWord(csys, crtr, npc, plant, predator, space, pmoosh, smoosh, moosh0, moosh1);
+
+        creature.renderPlayermove(crtr, plant, space, getInput());
         creature.creaturealowenerg(crtr);
-        creature.preyCreature(npc);
-        creature.eatPrey(crtr, npc);
-        creature.predatorCreature(predator);
+        creature.preyCreature(npc, space);
+        creature.eatPrey(crtr, npc, space);
+        creature.predatorCreature(predator, space);
         creature.eatPlayer(crtr, predator);
+
+        smoosh.eatMoosh(crtr, moosh0, space);
+        pmoosh.eatMoosh(crtr, moosh1, space);
+
+        edplant.eatPlants(crtr, plant, space);
+        pplant.eatPlants(crtr, plant, space);
 
         if(creature.creatureDead(crtr))
         {
             std::cout << "creature is dead!\n";
             break;
         }
-        //std::cin.get();
     }
 }

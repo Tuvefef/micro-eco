@@ -1,18 +1,18 @@
 #include "creature.h"
 #include "structs.h"
 
-void RenderCreature::renderPlayermove(CreatureCoord& crtr, Plant& plant0, PlantCoord& plant, PoisonousPlantCoord& pplant, char ginp)
+void RenderCreature::renderPlayermove(CreatureCoord& crtr, PlantCoord& plant, SpaceCoords& space, char ginp)
 {
 
     switch (ginp)
     {
-    case 'w': crtr.gposy = gclamp(crtr.gposy - 1, 0, 10 - 1);
+    case 'w': crtr.gposy = gclamp(crtr.gposy - 1, 0, space.gwspace - 1);
         break;
-    case 's': crtr.gposy = gclamp(crtr.gposy + 1, 0, 10 - 1);
+    case 's': crtr.gposy = gclamp(crtr.gposy + 1, 0, space.ghspace - 1);
         break;
-    case 'a': crtr.gposx= gclamp(crtr.gposx -1, 0, 10 - 1);
+    case 'a': crtr.gposx = gclamp(crtr.gposx - 1, 0, space.gwspace - 1);
         break;
-    case 'd': crtr.gposx = gclamp(crtr.gposx + 1, 0, 10 - 1);
+    case 'd': crtr.gposx = gclamp(crtr.gposx + 1, 0, space.ghspace - 1);
         break;
     case 'q': crtr.genergy = 0;
         break;
@@ -32,18 +32,18 @@ bool RenderCreature::creatureDead(CreatureCoord& crtr)
     return crtr.genergy <= 0;
 }
 
-void RenderCreature::preyCreature(CreatureCoord& npc)
+void RenderCreature::preyCreature(CreatureCoord& npc, SpaceCoords& space)
 {
     int gprei = rand() % 6;
     switch (gprei)
     {
-    case 0: npc.gposy = gclamp(npc.gposy - 1, 0, 10 - 1);
+    case 0: npc.gposy = gclamp(npc.gposy - 1, 0, space.gwspace - 1);
         break;
-    case 1: npc.gposy = gclamp(npc.gposy + 1, 0, 10 - 1);
+    case 1: npc.gposy = gclamp(npc.gposy + 1, 0, space.ghspace - 1);
         break;
-    case 2: npc.gposx = gclamp(npc.gposx - 1, 0, 10 - 1);
+    case 2: npc.gposx = gclamp(npc.gposx - 1, 0, space.gwspace - 1);
         break;
-    case 3: npc.gposx = gclamp(npc.gposx + 1, 0, 10 - 1);
+    case 3: npc.gposx = gclamp(npc.gposx + 1, 0, space.ghspace - 1);
         break;
     
     default:
@@ -51,52 +51,37 @@ void RenderCreature::preyCreature(CreatureCoord& npc)
     }
 }
 
-void RenderCreature::spawnPrey(CreatureCoord& npc, CreatureCoord& crtr)
+void RenderCreature::spawnPrey(CreatureCoord& npc, CreatureCoord& crtr, SpaceCoords& space)
 {
     do
     {
-        npc.gposx = rand() % 10;
-        npc.gposy = rand() % 10;
+        npc.gposx = rand() % space.gwspace;
+        npc.gposy = rand() % space.ghspace;
     } while (npc.gposx == crtr.gposx && npc.gposy == crtr.gposy);
 }
 
-void RenderCreature::eatPrey(CreatureCoord& crtr, CreatureCoord& npc)
+void RenderCreature::eatPrey(CreatureCoord& crtr, CreatureCoord& npc, SpaceCoords& space)
 {
     if(crtr.gposx == npc.gposx &&  crtr.gposy == npc.gposy)
     {
         crtr.genergy += 10;
-        spawnPrey(npc, crtr);
+        spawnPrey(npc, crtr, space);
     }
 }
 
-void RenderCreature::creatureEatPlant(CreatureCoord& crtr, Plant& plant0, PlantCoord& plant, PoisonousPlantCoord& pplant)
+void RenderCreature::predatorCreature(CreatureCoord& predatorCreature, SpaceCoords& space)
 {
-    if(crtr.gposx == plant.gpx && crtr.gposy == plant.gpy)
-    {
-        crtr.genergy += 5;
-        plant0.spawnPlant(crtr, plant);
-    }
-
-    if(crtr.gposx == pplant.gppx && crtr.gposy == pplant.gppy)
-    {
-        crtr.genergy -= 5;
-        plant0.spawnPoisonousPlant(crtr, plant, pplant);
-    }
-}
-
-void RenderCreature::predatorCreature(CreatureCoord& predatorCreature)
-{
-    int gpr = rand() % 3;
+    int gpr = rand() % 4;
 
     switch(gpr)
     {
-        case 0: predatorCreature.gposy = gclamp(predatorCreature.gposy -1, 0, 10 -1);
+        case 0: predatorCreature.gposy = gclamp(predatorCreature.gposy - 1, 0, space.gwspace -1);
             break;
-        case 1: predatorCreature.gposy = gclamp(predatorCreature.gposy + 1, 0, 10 - 1);
+        case 1: predatorCreature.gposy = gclamp(predatorCreature.gposy + 1, 0, space.ghspace - 1);
             break;
-        case 2: predatorCreature.gposx = gclamp(predatorCreature.gposx - 1, 0, 10 - 1);
+        case 2: predatorCreature.gposx = gclamp(predatorCreature.gposx - 1, 0, space.gwspace - 1);
             break;
-        case 3: predatorCreature.gposx = gclamp(predatorCreature.gposx + 1, 0, 10 - 1);
+        case 3: predatorCreature.gposx = gclamp(predatorCreature.gposx + 1, 0, space.ghspace - 1);
             break;
 
         default:
