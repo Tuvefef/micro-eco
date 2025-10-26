@@ -36,4 +36,12 @@ struct MooshroomCoord
     int gmpy;
 };
 
+enum IncCoords
+{
+    iccoorw = 0,
+    iccoors = 1,
+    iccoora = 2,
+    iccoord = 3
+};
+
 #endif

@@ -1,22 +1,33 @@
-#ifndef CREATURE
-#define CREATURE
+#ifndef CREATUREH
+#define CREATUREH
 
 #include <cstdlib>
+#include <variant>
+
 #include "structs.h"
 #include "sysmath.h"
 
-class RenderCreature
+using vIntChar = std::variant<int, char>;
+
+class CreatureMove
 {
     public:
-        void renderPlayermove(CreatureCoord& crtr, PlantCoord& plant, SpaceCoords& space, char ginp);
-        void creaturealowenerg(CreatureCoord& crtr);
-        bool creatureDead(CreatureCoord& crtr);
-        void preyCreature(CreatureCoord& npc, SpaceCoords& space);
-        void spawnPrey(CreatureCoord& npc, CreatureCoord& crtr, SpaceCoords& space);
-        void eatPrey(CreatureCoord& crtr, CreatureCoord& npc, SpaceCoords& space);
+        virtual void moveCreature(CreatureCoord& crtr, SpaceCoords& space, vIntChar inc) = 0;
+        virtual ~CreatureMove() = default;
+};
 
-        void predatorCreature(CreatureCoord& predator, SpaceCoords& space);
-        void eatPlayer(CreatureCoord& crtr, CreatureCoord& predator);
+class CreatureSpawn
+{
+    public:
+        virtual void creatureSpawn(CreatureCoord& crtr, CreatureCoord& npc, SpaceCoords& space) = 0;
+        virtual ~CreatureSpawn() = default;
+};
+
+class CreatureEat
+{
+    public:
+        virtual void creatureEat(CreatureCoord& crtr, CreatureCoord& npc, SpaceCoords& space) = 0;
+        virtual ~CreatureEat() = default;
 };
 
 #endif

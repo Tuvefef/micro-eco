@@ -7,14 +7,15 @@
 #include <unistd.h>
 #include <algorithm>
 
-#include "program/consoleFormat.h"
-#include "program/creature.h"
+#include "program/console.h"
 #include "program/splants.h"
 #include "program/pplants.h"
 #include "program/smoosh.h"
 #include "program/pmoosh.h"
 #include "program/structs.h"
 #include "program/sysmath.h"
+#include "program/rplayer.h"
+#include "program/rcreature.h"
 
 #define gw0 10
 #define gh0 10
@@ -71,12 +72,15 @@ int main()
 {
     //class instance
     Consoleformat csys;
-    RenderCreature creature;
     SafeMoosh smoosh;
     PoisonousMoosh pmoosh;
 
     EdiblePlant edplant;
     PoisonousPlant pplant;
+
+    RenderPlayer incplayer;
+    RenderPrey incprey;
+    RenderPredator mpred;
 
     //struct instances
     CreatureCoord crtr;
@@ -100,7 +104,8 @@ int main()
     crtr.gposy = space.ghspace / 2;
     crtr.genergy = defEnergy;
 
-    creature.spawnPrey(npc, crtr, space);
+    //creature.spawnPrey(npc, crtr, space);
+    incprey.creatureSpawn(crtr, npc, space);
 
     edplant.spawnPlants(crtr, plant, space);
     pplant.spawnPlants(crtr, plant, space);
@@ -117,12 +122,16 @@ int main()
 
         renderWord(csys, crtr, npc, plant, predator, space, pmoosh, smoosh, moosh0, moosh1);
 
-        creature.renderPlayermove(crtr, plant, space, getInput());
-        creature.creaturealowenerg(crtr);
-        creature.preyCreature(npc, space);
-        creature.eatPrey(crtr, npc, space);
-        creature.predatorCreature(predator, space);
-        creature.eatPlayer(crtr, predator);
+        //creature.renderPlayermove(crtr, plant, space, getInput());
+        incplayer.moveCreature(crtr, space, getInput());
+        incplayer.playerLowenerg(crtr);
+        //creature.preyCreature(npc, space);
+        incprey.moveCreature(npc, space, rand() % 6);
+        //creature.eatPrey(crtr, npc, space);
+        incplayer.creatureEat(crtr, npc, space);
+        mpred.moveCreature(predator, space, rand() % 4);
+        //creature.predatorCreature(predator, space);
+        mpred.creatureEat(crtr, predator, space);
 
         smoosh.eatMoosh(crtr, moosh0, space);
         pmoosh.eatMoosh(crtr, moosh1, space);
@@ -130,7 +139,7 @@ int main()
         edplant.eatPlants(crtr, plant, space);
         pplant.eatPlants(crtr, plant, space);
 
-        if(creature.creatureDead(crtr))
+        if(incplayer.playerDead(crtr))
         {
             std::cout << "creature is dead!\n";
             break;
