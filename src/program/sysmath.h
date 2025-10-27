@@ -13,6 +13,10 @@ T gmin(T x, T y)
     return (x < y) ? x : y;
 }
 
-#define gclamp(x, min, max) (gmax(min, gmin(max, x)))
+template <typename T>
+T gclamp(T x, T min, T max)
+{
+    return gmax(min, gmin(max, x));
+}
 
 #endif

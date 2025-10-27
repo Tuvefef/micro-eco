@@ -16,11 +16,7 @@
 #include "program/sysmath.h"
 #include "program/rplayer.h"
 #include "program/rcreature.h"
-
-#define gw0 10
-#define gh0 10
-#define gTicks 300
-#define defEnergy 50
+#include "program/hmoosh.h"
 
 void setNCursesBool(bool enable)
 {
@@ -41,7 +37,7 @@ char getInput()
     return x;
 }
 
-void renderWord(Consoleformat& csys, CreatureCoord& crtr, CreatureCoord& npc, PlantCoord& plant, CreatureCoord& predator, SpaceCoords& space, PoisonousMoosh& pmoosh, SafeMoosh& smoosh, MooshroomCoord& moosh0, MooshroomCoord& moosh1)
+void renderWord(Consoleformat& csys, CreatureCoord& crtr, CreatureCoord& npc, PlantCoord& plant, CreatureCoord& predator, SpaceCoords& space, PoisonousMoosh& pmoosh, SafeMoosh& smoosh, MooshroomCoord& moosh0, MooshroomCoord& moosh1, MooshroomCoord& moosh2)
 {
     for(int i0 = 0; i0 < space.ghspace; i0++)
     {
@@ -61,6 +57,8 @@ void renderWord(Consoleformat& csys, CreatureCoord& crtr, CreatureCoord& npc, Pl
                 std::cout << csys.yellow() << "m " << csys.reset() << std::flush;
             else if(e0 == moosh1.gmpx && i0 == moosh1.gmpy)
                 std::cout << csys.purple() << "m " << csys.reset() << std::flush;
+            else if(e0 == moosh2.ghpx && i0 == moosh2.ghpy)
+                std::cout << csys.grey() << "m " << csys.reset() << std::flush;
             else
                 std::cout << csys.green() << ". " << csys.reset() << std::flush;
         }
@@ -74,6 +72,7 @@ int main()
     Consoleformat csys;
     SafeMoosh smoosh;
     PoisonousMoosh pmoosh;
+    HallucinogenMoosh hmoosh;
 
     EdiblePlant edplant;
     PoisonousPlant pplant;
@@ -90,6 +89,8 @@ int main()
     SpaceCoords space;
     MooshroomCoord moosh0;
     MooshroomCoord moosh1;
+    MooshroomCoord moosh2;
+    Hallucinogen gall;
 
     std::cout << csys.consoleclear();
     std::cout << "Welcome to the eco sim!\n";
@@ -102,7 +103,7 @@ int main()
 
     crtr.gposx = space.gwspace / 2;
     crtr.gposy = space.ghspace / 2;
-    crtr.genergy = defEnergy;
+    crtr.genergy = INITENERG;
 
     //creature.spawnPrey(npc, crtr, space);
     incprey.creatureSpawn(crtr, npc, space);
@@ -112,29 +113,38 @@ int main()
     
     pmoosh.spawnMoosh(moosh1, crtr, space);
     smoosh.spawnMoosh(moosh0, crtr, space);
+    hmoosh.spawnMoosh(moosh2, crtr, space);
 
-    for(int gtck = 0; gtck < gTicks; gtck++)
+    for(int gtck = 0; gtck < MAXTICKSGAME; gtck++)
     {
         std::cout << csys.consoleclear();
         std::cout << "ticks: " << gtck << "\n";
 
         std::cout << "energy: " << crtr.genergy << "\n";
 
-        renderWord(csys, crtr, npc, plant, predator, space, pmoosh, smoosh, moosh0, moosh1);
+        renderWord(csys, crtr, npc, plant, predator, space, pmoosh, smoosh, moosh0, moosh1, moosh2);
 
-        //creature.renderPlayermove(crtr, plant, space, getInput());
         incplayer.moveCreature(crtr, space, getInput());
         incplayer.playerLowenerg(crtr);
-        //creature.preyCreature(npc, space);
         incprey.moveCreature(npc, space, rand() % 6);
-        //creature.eatPrey(crtr, npc, space);
         incplayer.creatureEat(crtr, npc, space);
         mpred.moveCreature(predator, space, rand() % 4);
-        //creature.predatorCreature(predator, space);
         mpred.creatureEat(crtr, predator, space);
 
-        smoosh.eatMoosh(crtr, moosh0, space);
-        pmoosh.eatMoosh(crtr, moosh1, space);
+        smoosh.eatMoosh(crtr, moosh0, space, gall);
+        pmoosh.eatMoosh(crtr, moosh1, space, gall);
+        hmoosh.eatMoosh(crtr, moosh2, space, gall);
+
+        if(gall.ishallucination)
+        {
+            hmoosh.effectMoosh(crtr, gall);
+            hmoosh.lowEffect(gall);
+        }
+
+        if(hmoosh.tickteffect(gall))
+        {
+            gall.ishallucination = false;
+        }
 
         edplant.eatPlants(crtr, plant, space);
         pplant.eatPlants(crtr, plant, space);

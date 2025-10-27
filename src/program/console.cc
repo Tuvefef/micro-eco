@@ -35,6 +35,11 @@ std::string Consoleformat::red()
     return "\033[31m\033[1m";
 }
 
+std::string Consoleformat::grey()
+{
+    return "\033[37m";
+}
+
 std::string Consoleformat::consoleclear()
 {
     return "\033[2J\033[H";

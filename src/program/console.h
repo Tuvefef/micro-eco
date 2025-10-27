@@ -13,6 +13,7 @@ class Consoleformat
         std::string purple();
         std::string yellow();
         std::string red();
+        std::string grey();
         std::string consoleclear();
 };
 
