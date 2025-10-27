@@ -9,11 +9,11 @@ void EdiblePlant::spawnPlants(CreatureCoord& crtr, PlantCoord& plant, SpaceCoord
     } while(plant.gpx == crtr.gposx && plant.gpy == crtr.gposy);
 }
 
-void EdiblePlant::eatPlants(CreatureCoord& crtr, PlantCoord& plant, SpaceCoords& space)
+void EdiblePlant::eatPlants(CreatureCoord& crtr, PlantCoord& plant, SpaceCoords& space, EnergCreature& energy)
 {
     if(crtr.gposx == plant.gpx && crtr.gposy == plant.gpy)
     {
-        crtr.genergy += 5;
+        energy.genergy += 5;
         spawnPlants(crtr, plant, space);
     }
 }

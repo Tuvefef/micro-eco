@@ -91,6 +91,7 @@ int main()
     MooshroomCoord moosh1;
     MooshroomCoord moosh2;
     Hallucinogen gall;
+    EnergCreature energy;
 
     std::cout << csys.consoleclear();
     std::cout << "Welcome to the eco sim!\n";
@@ -103,7 +104,7 @@ int main()
 
     crtr.gposx = space.gwspace / 2;
     crtr.gposy = space.ghspace / 2;
-    crtr.genergy = INITENERG;
+    energy.genergy = INITENERG;
 
     //creature.spawnPrey(npc, crtr, space);
     incprey.creatureSpawn(crtr, npc, space);
@@ -120,20 +121,20 @@ int main()
         std::cout << csys.consoleclear();
         std::cout << "ticks: " << gtck << "\n";
 
-        std::cout << "energy: " << crtr.genergy << "\n";
+        std::cout << "energy: " << energy.genergy << "\n";
 
         renderWord(csys, crtr, npc, plant, predator, space, pmoosh, smoosh, moosh0, moosh1, moosh2);
 
-        incplayer.moveCreature(crtr, space, getInput());
-        incplayer.playerLowenerg(crtr);
-        incprey.moveCreature(npc, space, rand() % 6);
-        incplayer.creatureEat(crtr, npc, space);
-        mpred.moveCreature(predator, space, rand() % 4);
-        mpred.creatureEat(crtr, predator, space);
+        incplayer.moveCreature(crtr, space, getInput(), energy);
+        incplayer.playerLowenerg(energy);
+        incprey.moveCreature(npc, space, rand() % 6, energy);
+        incplayer.creatureEat(crtr, npc, space, energy);
+        mpred.moveCreature(predator, space, rand() % 4, energy);
+        mpred.creatureEat(crtr, predator, space, energy);
 
-        smoosh.eatMoosh(crtr, moosh0, space, gall);
-        pmoosh.eatMoosh(crtr, moosh1, space, gall);
-        hmoosh.eatMoosh(crtr, moosh2, space, gall);
+        smoosh.eatMoosh(crtr, moosh0, space, gall, energy);
+        pmoosh.eatMoosh(crtr, moosh1, space, gall, energy);
+        hmoosh.eatMoosh(crtr, moosh2, space, gall, energy);
 
         if(gall.ishallucination)
         {
@@ -146,10 +147,10 @@ int main()
             gall.ishallucination = false;
         }
 
-        edplant.eatPlants(crtr, plant, space);
-        pplant.eatPlants(crtr, plant, space);
+        edplant.eatPlants(crtr, plant, space, energy);
+        pplant.eatPlants(crtr, plant, space, energy);
 
-        if(incplayer.playerDead(crtr))
+        if(incplayer.playerDead(energy))
         {
             std::cout << "creature is dead!\n";
             break;

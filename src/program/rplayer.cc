@@ -1,7 +1,7 @@
 #include "rplayer.h"
 #include "rcreature.h"
 
-void RenderPlayer::moveCreature(CreatureCoord& crtr, SpaceCoords& space, vIntChar inc)
+void RenderPlayer::moveCreature(CreatureCoord& crtr, SpaceCoords& space, vIntChar inc, EnergCreature& energy)
 {
     if(std::holds_alternative<char>(inc))
     {
@@ -16,7 +16,7 @@ void RenderPlayer::moveCreature(CreatureCoord& crtr, SpaceCoords& space, vIntCha
                 break;
             case 'd': crtr.gposx = gclamp(crtr.gposx + 1, 0, space.ghspace - 1);
                 break;
-            case 'q': crtr.genergy = 0;
+            case 'q': energy.genergy = 0;
                 break;
     
             default:
@@ -25,22 +25,22 @@ void RenderPlayer::moveCreature(CreatureCoord& crtr, SpaceCoords& space, vIntCha
     }
 }
 
-void RenderPlayer::creatureEat(CreatureCoord& crtr, CreatureCoord& npc, SpaceCoords& space)
+void RenderPlayer::creatureEat(CreatureCoord& crtr, CreatureCoord& npc, SpaceCoords& space, EnergCreature& energy)
 {
     RenderPrey spreys;
     if(crtr.gposx == npc.gposx &&  crtr.gposy == npc.gposy)
     {
-        crtr.genergy += MAXPREYVAL;
+        energy.genergy += MAXPREYVAL;
         spreys.creatureSpawn(crtr, npc, space);
     }
 }
 
-void RenderPlayer::playerLowenerg(CreatureCoord& crtr)
+void RenderPlayer::playerLowenerg(EnergCreature& energy)
 {
-    crtr.genergy--;
+    energy.genergy--;
 }
 
-bool RenderPlayer::playerDead(CreatureCoord& crtr)
+bool RenderPlayer::playerDead(EnergCreature& energy)
 {
-    return crtr.genergy <= ENDENTITY;
+    return energy.genergy <= ENDENTITY;
 }

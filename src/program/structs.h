@@ -15,7 +15,6 @@ struct CreatureCoord
 {
     int gposx;
     int gposy;
-    int genergy;
 };
 
 struct Hallucinogen
@@ -56,6 +55,13 @@ struct MooshroomCoord
 
     int ghpx;
     int ghpy;
+};
+
+struct EnergCreature
+{
+    int geprey;
+    int gepred;
+    int genergy;
 };
 
 enum IncCoords

@@ -6,11 +6,11 @@
 class RenderPlayer : public CreatureMove, CreatureEat
 {
     public:
-        void moveCreature(CreatureCoord& crtr, SpaceCoords& space, vIntChar inc) override;
-        void creatureEat(CreatureCoord& crtr, CreatureCoord& npc, SpaceCoords& space) override;
+        void moveCreature(CreatureCoord& crtr, SpaceCoords& space, vIntChar inc, EnergCreature& energy) override;
+        void creatureEat(CreatureCoord& crtr, CreatureCoord& npc, SpaceCoords& space, EnergCreature& energy) override;
         
-        void playerLowenerg(CreatureCoord& crtr);
-        bool playerDead(CreatureCoord& crtr);
+        void playerLowenerg(EnergCreature& energy);
+        bool playerDead(EnergCreature& energy);
 };
 
 #endif

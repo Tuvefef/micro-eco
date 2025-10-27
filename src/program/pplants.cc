@@ -9,11 +9,11 @@ void PoisonousPlant::spawnPlants(CreatureCoord& crtr, PlantCoord& plant, SpaceCo
     } while((plant.gppx == crtr.gposx && plant.gppy == crtr.gposy) || (plant.gppx == plant.gpx && plant.gppy == plant.gpy));
 }
 
-void PoisonousPlant::eatPlants(CreatureCoord& crtr, PlantCoord& plant, SpaceCoords& space)
+void PoisonousPlant::eatPlants(CreatureCoord& crtr, PlantCoord& plant, SpaceCoords& space, EnergCreature& energy)
 {
     if(crtr.gposx == plant.gppx && crtr.gposy == plant.gppy)
     {
-        crtr.genergy -= 3;
+        energy.genergy -= 3;
         spawnPlants(crtr, plant, space);
     }
 }

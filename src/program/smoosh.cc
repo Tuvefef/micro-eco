@@ -9,11 +9,11 @@ void SafeMoosh::spawnMoosh(MooshroomCoord& moosh0, CreatureCoord& crtr, SpaceCoo
     } while(moosh0.gmfx == crtr.gposx && moosh0.gmfy == crtr.gposy);
 }
 
-void SafeMoosh::eatMoosh(CreatureCoord& crtr, MooshroomCoord& moosh0, SpaceCoords& space, Hallucinogen& gall)
+void SafeMoosh::eatMoosh(CreatureCoord& crtr, MooshroomCoord& moosh0, SpaceCoords& space, Hallucinogen& gall, EnergCreature& energy)
 {
     if(crtr.gposx == moosh0.gmfx && crtr.gposy == moosh0.gmfy)
     {
-        crtr.genergy += 7;
+        energy.genergy += 7;
         spawnMoosh(moosh0, crtr, space);
     }
 }

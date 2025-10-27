@@ -1,6 +1,6 @@
 #include "rcreature.h"
 
-void RenderPrey::moveCreature(CreatureCoord& npc, SpaceCoords& space, vIntChar inc)
+void RenderPrey::moveCreature(CreatureCoord& npc, SpaceCoords& space, vIntChar inc, EnergCreature& energy)
 {
     if(std::holds_alternative<int>(inc))
     {
@@ -22,7 +22,7 @@ void RenderPrey::moveCreature(CreatureCoord& npc, SpaceCoords& space, vIntChar i
     }
 }
 
-void RenderPredator::moveCreature(CreatureCoord& predator, SpaceCoords& space, vIntChar inc)
+void RenderPredator::moveCreature(CreatureCoord& predator, SpaceCoords& space, vIntChar inc, EnergCreature& energy)
 {
     if(std::holds_alternative<int>(inc))
     {
@@ -53,10 +53,10 @@ void RenderPrey::creatureSpawn(CreatureCoord& crtr, CreatureCoord& npc, SpaceCoo
     } while (npc.gposx == crtr.gposx && npc.gposy == crtr.gposy);
 }
 
-void RenderPredator::creatureEat(CreatureCoord& crtr, CreatureCoord& predator, SpaceCoords& space)
+void RenderPredator::creatureEat(CreatureCoord& crtr, CreatureCoord& predator, SpaceCoords& space, EnergCreature& energy)
 {
     if(crtr.gposx == predator.gposx && crtr.gposy == predator.gposy)
     {
-        crtr.genergy -= 20;
+        energy.genergy -= 20;
     }
 }

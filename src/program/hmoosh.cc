@@ -31,11 +31,11 @@ void HallucinogenMoosh::effectMoosh(CreatureCoord& crtr, Hallucinogen& gall)
     crtr.gposy = ginity;
 }
 
-void HallucinogenMoosh::eatMoosh(CreatureCoord& crtr, MooshroomCoord& moosh0, SpaceCoords& space, Hallucinogen& gall)
+void HallucinogenMoosh::eatMoosh(CreatureCoord& crtr, MooshroomCoord& moosh0, SpaceCoords& space, Hallucinogen& gall, EnergCreature& energy)
 {
     if(crtr.gposx == moosh0.ghpx && crtr.gposy == moosh0.ghpy)
     {
-        crtr.genergy += 7;
+        energy.genergy += 7;
 
         gall.ishallucination = true;
         gall.hallucinationTicks = MAXHALLUCINOGEN;
