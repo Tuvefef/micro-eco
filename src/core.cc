@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <tuple>
 #include <cstdlib>
 #include <ctime>
 #include <string>
@@ -39,27 +40,32 @@ char getInput()
 
 void renderWord(Consoleformat& csys, CreatureCoord& crtr, CreatureCoord& npc, PlantCoord& plant, CreatureCoord& predator, SpaceCoords& space, PoisonousMoosh& pmoosh, SafeMoosh& smoosh, MooshroomCoord& moosh0, MooshroomCoord& moosh1, MooshroomCoord& moosh2)
 {
+    std::vector<std::tuple<int, int, std::string, std::string>> gentities = {
+        {crtr.gposx, crtr.gposy, csys.blue(), "i "},
+        {plant.gpx,  plant.gpy,  csys.cyan(), "* "},
+        {plant.gppx, plant.gppy, csys.purple(), "* "},
+        {npc.gposx,  npc.gposy,  csys.yellow(), "~ "},
+        {predator.gposx, predator.gposy, csys.red(), "! "},
+        {moosh0.gmfx, moosh0.gmfy, csys.yellow(), "m "},
+        {moosh1.gmpx, moosh1.gmpy, csys.purple(), "m "},
+        {moosh2.ghpx, moosh2.ghpy, csys.grey(), "m "}
+    };
+
     for(int i0 = 0; i0 < space.ghspace; i0++)
     {
         for(int e0 = 0; e0 < space.gwspace; e0++)
         {
-            if(e0 == crtr.gposx && i0 == crtr.gposy)
-                std::cout << csys.blue() << "i " << csys.reset() << std::flush;
-            else if(e0 == plant.gpx && i0 == plant.gpy)
-                std::cout << csys.cyan() << "* " << csys.reset() << std::flush;
-            else if(e0 == plant.gppx && i0 == plant.gppy)
-                std::cout << csys.purple() << "* " << csys.reset() << std::flush;
-            else if(e0 == npc.gposx && i0 == npc.gposy)
-                std::cout << csys.yellow() << "~ " << csys.reset() << std::flush;
-            else if(e0 == predator.gposx && i0 == predator.gposy)
-                std::cout << csys.red() << "! " << csys.reset() << std::flush;
-            else if(e0 == moosh0.gmfx && i0 == moosh0.gmfy)
-                std::cout << csys.yellow() << "m " << csys.reset() << std::flush;
-            else if(e0 == moosh1.gmpx && i0 == moosh1.gmpy)
-                std::cout << csys.purple() << "m " << csys.reset() << std::flush;
-            else if(e0 == moosh2.ghpx && i0 == moosh2.ghpy)
-                std::cout << csys.grey() << "m " << csys.reset() << std::flush;
-            else
+            bool drawn = false;
+            for(auto& [ex, ey, color, symbol] : gentities)
+            {
+                if(e0 == ex && i0 == ey)
+                {
+                    std::cout << color << symbol << csys.reset() << std::flush;
+                    drawn = true;
+                    break;
+                }
+            }
+            if(!drawn)
                 std::cout << csys.green() << ". " << csys.reset() << std::flush;
         }
         std::cout << std::endl;
@@ -104,7 +110,8 @@ int main()
 
     crtr.gposx = space.gwspace / 2;
     crtr.gposy = space.ghspace / 2;
-    energy.genergy = INITENERG;
+
+    energy.genergy = IncMacros::INITENERG;
 
     //creature.spawnPrey(npc, crtr, space);
     incprey.creatureSpawn(crtr, npc, space);
@@ -116,12 +123,17 @@ int main()
     smoosh.spawnMoosh(moosh0, crtr, space);
     hmoosh.spawnMoosh(moosh2, crtr, space);
 
-    for(int gtck = 0; gtck < MAXTICKSGAME; gtck++)
+    for(int gtck = 0; gtck < IncMacros::MAXTICKSGAME; gtck++)
     {
         std::cout << csys.consoleclear();
         std::cout << "ticks: " << gtck << "\n";
 
         std::cout << "energy: " << energy.genergy << "\n";
+
+        if(gall.ishallucination) 
+        {
+            std::cout << "hallucination: " << gall.hallucinationTicks << "\n";
+        }
 
         renderWord(csys, crtr, npc, plant, predator, space, pmoosh, smoosh, moosh0, moosh1, moosh2);
 

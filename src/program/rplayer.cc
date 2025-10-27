@@ -30,7 +30,7 @@ void RenderPlayer::creatureEat(CreatureCoord& crtr, CreatureCoord& npc, SpaceCoo
     RenderPrey spreys;
     if(crtr.gposx == npc.gposx &&  crtr.gposy == npc.gposy)
     {
-        energy.genergy += MAXPREYVAL;
+        energy.genergy += IncMacros::MAXPREYVAL;
         spreys.creatureSpawn(crtr, npc, space);
     }
 }
@@ -42,5 +42,5 @@ void RenderPlayer::playerLowenerg(EnergCreature& energy)
 
 bool RenderPlayer::playerDead(EnergCreature& energy)
 {
-    return energy.genergy <= ENDENTITY;
+    return energy.genergy <= IncMacros::ENDENTITY;
 }

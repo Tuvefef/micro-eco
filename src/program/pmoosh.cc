@@ -13,7 +13,7 @@ void PoisonousMoosh::eatMoosh(CreatureCoord& crtr, MooshroomCoord& moosh0, Space
 {
     if(crtr.gposx == moosh0.gmpx && crtr.gposy == moosh0.gmpy)
     {
-        energy.genergy -= MPOISONOUSVAL;
+        energy.genergy -= IncMacros::MPOISONOUSVAL;
         spawnMoosh(moosh0, crtr, space);
     }
 }

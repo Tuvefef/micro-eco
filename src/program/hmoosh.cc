@@ -18,7 +18,7 @@ void HallucinogenMoosh::effectMoosh(CreatureCoord& crtr, Hallucinogen& gall)
     int ginity = crtr.gposy + 0;
 
     double e = (double)rand() / RAND_MAX;
-    if(e < HALLUCINOGENPROB)
+    if(e < IncMacros::HALLUCINOGENPROB)
     {
         int gedx = (rand() % (2 * 1 + 1)) - 1;
         int gedy = (rand() % (2 * 1 + 1)) - 1;
@@ -38,7 +38,7 @@ void HallucinogenMoosh::eatMoosh(CreatureCoord& crtr, MooshroomCoord& moosh0, Sp
         energy.genergy += 7;
 
         gall.ishallucination = true;
-        gall.hallucinationTicks = MAXHALLUCINOGEN;
+        gall.hallucinationTicks = IncMacros::MAXHALLUCINOGEN;
         spawnMoosh(moosh0, crtr, space);
     }
 }
@@ -50,5 +50,5 @@ int HallucinogenMoosh::lowEffect(Hallucinogen& gall)
 
 bool HallucinogenMoosh::tickteffect(Hallucinogen& gall)
 {
-    return gall.hallucinationTicks <= ENDENTITY;
+    return gall.hallucinationTicks <= IncMacros::ENDENTITY;
 }

@@ -1,15 +1,23 @@
 #ifndef ENTITYSTRUCTS
 #define ENTITYSTRUCTS
 
-#define MAXHALLUCINOGEN 10
-#define HALLUCINOGENPROB 0.99
+#include <cstdint>
 
-#define MAXPREYVAL 10
-#define MPOISONOUSVAL 8
-#define ENDENTITY 0
+namespace IncMacros
+{
+    inline constexpr std::int32_t MAXHALLUCINOGEN = 10;
+    inline constexpr double HALLUCINOGENPROB = 0.99;
 
-#define MAXTICKSGAME 300
-#define INITENERG 50
+    inline constexpr std::int32_t MAXPREYVAL = 10;
+    inline constexpr std::int32_t MPOISONOUSVAL = 8;
+    inline constexpr std::int32_t ENDENTITY = 0;
+
+    inline constexpr std::int32_t MAXTICKSGAME = 300;
+    inline constexpr std::int32_t INITENERG = 50;
+
+    inline constexpr std::int32_t PREY0ENERG = 20;
+    inline constexpr std::int32_t PRED0ENERG = 20;
+};
 
 struct CreatureCoord
 {
@@ -64,7 +72,7 @@ struct EnergCreature
     int genergy;
 };
 
-enum IncCoords
+enum IncCoords 
 {
     iccoorw = 0,
     iccoors = 1,
