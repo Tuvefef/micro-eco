@@ -12,7 +12,7 @@ struct sCreatureCoord
 
 struct sCreatureEnergy
 {
-    int generg = 75;
+    int generg = 200;
 };
 
 struct sPlantsCoord

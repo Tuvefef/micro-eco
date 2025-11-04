@@ -3,6 +3,10 @@
 
 #include <variant>
 
+#define ESHFT8CC(x) ((x) >> (8))
+#define ESHFT16CC(x) ((x) >> (16))
+#define EBLENDXORCC(x) ((ESHFT8CC(x)) ^ (ESHFT16CC(x))) 
+
 constexpr int WIDTH = 12;
 constexpr int HEIGHT = 12;
 

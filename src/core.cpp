@@ -3,9 +3,10 @@
 #include <termios.h>
 #include <unistd.h>
 
-#include "common/utils.hpp"
-#include "common/structs.hpp"
+#include "common/core/utils.hpp"
+#include "common/core/structs.hpp"
 #include "common/console.hpp"
+#include "common/core/erand.h"
 
 #include "common/eplant.hpp"
 #include "common/eplayer.hpp"
@@ -38,15 +39,15 @@ void renderChars(sCreatureCoord &scc, sPlantsCoord &spc)
         for(int j = 0; j < HEIGHT; j++)
         {
             if(i == scc.ply && j == scc.plx)
-                std::cout << console::grey << "i " << console::reset << std::flush;
+                std::cout << console::grey << "i " << console::reset;
             else if(i == spc.psy && j == spc.psx)
-                std::cout << console::cyan << "* " << console::reset << std::flush;
+                std::cout << console::cyan << "* " << console::reset;
             else if(i == spc.ppy && j == spc.ppx)
-                std::cout << console::greenb << "* " << console::reset << std::flush;
+                std::cout << console::greenb << "* " << console::reset;
             else if(i == scc.pyy0 && j == scc.pyx0)
-                std::cout << console::yellowb << "~ " << console::reset << std::flush;
+                std::cout << console::yellowb << "~ " << console::reset;
             else 
-                std::cout << console::green << ". " << console::reset << std::flush; 
+                std::cout << console::green << ". " << console::reset; 
         }
         std::cout << std::endl;
     }
@@ -68,7 +69,7 @@ int main()
     std::cout << "press enter to star\n";
     std::cin.get();
 
-    srand(time(nullptr));
+    gSrand16(time(nullptr));
 
     scc.plx = WIDTH / 2;
     scc.ply = HEIGHT / 2;
@@ -86,7 +87,7 @@ int main()
         
         renderChars(scc, spc);
         rplayer.creatureMove(scc, &sce, getkeys());
-        prey0.creatureMove(scc, nullptr, rand() % gprey0);
+        prey0.creatureMove(scc, nullptr, grandmod8(gprey0));
         rplayer.creatureEat(scc, &sce);
         rplayer.playerLowEnerg(sce);
 

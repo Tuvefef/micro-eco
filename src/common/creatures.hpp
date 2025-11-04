@@ -3,8 +3,9 @@
 
 #include <cstdlib>
 
-#include "utils.hpp"
-#include "structs.hpp"
+#include "core/utils.hpp"
+#include "core/structs.hpp"
+#include "core/erand.h"
 
 class CreatureMove
 {

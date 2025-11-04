@@ -4,8 +4,8 @@ void SafePlant::spawnPlants(sCreatureCoord &scc, sPlantsCoord &spc)
 {
     do
     {
-        spc.psx = rand() % WIDTH;
-        spc.psy = rand() % HEIGHT;
+        spc.psx = grandmod16(WIDTH);
+        spc.psy = grandmod16(HEIGHT);
     } while(spc.psx == scc.plx && spc.psy == scc.ply);
     
 }
@@ -23,8 +23,8 @@ void PoisonousPlant::spawnPlants(sCreatureCoord &scc, sPlantsCoord &spc)
 {
     do
     {
-        spc.ppx = rand() % WIDTH;
-        spc.ppy = rand() % HEIGHT;
+        spc.ppx = grandmod16(WIDTH);
+        spc.ppy = grandmod16(HEIGHT);
     } while(spc.ppx == scc.plx && spc.ppy == scc.ply);
     
 }
