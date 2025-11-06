@@ -69,7 +69,7 @@ int main()
     std::cout << "press enter to star\n";
     std::cin.get();
 
-    gSrand16(time(nullptr));
+    gSrand(time(nullptr));
 
     scc.plx = WIDTH / 2;
     scc.ply = HEIGHT / 2;
@@ -87,7 +87,7 @@ int main()
         
         renderChars(scc, spc);
         rplayer.creatureMove(scc, &sce, getkeys());
-        prey0.creatureMove(scc, nullptr, grandmod8(gprey0));
+        prey0.creatureMove(scc, nullptr, static_cast<int>(grmod(gprey0)));
         rplayer.creatureEat(scc, &sce);
         rplayer.playerLowEnerg(sce);
 

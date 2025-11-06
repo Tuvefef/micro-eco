@@ -5,24 +5,56 @@
 
 #define GRANDVAL8 0xff
 #define GRANDVAL16 0xffff
+#define GRANDVAL32 0xffffffff
 
-#define ESHFT8(x) ((x) >> (8))
-#define ESHFT16(x) ((x) >> (16))
-#define EBLENDXOR(x) ((ESHFT8(x)) ^ (ESHFT16(x)))
+#define RAND8
+#define ESHFT8(x) ((x) >> 8)
+#define EBLENDXOR(x) (((x) >> 8) ^ ((x) >> 16))
 
-const unsigned int lcga = 1664525;
-const unsigned int lcgc = 1013904223;
+static const uint32_t lcga = 1664525u;
+static const uint32_t lcgc = 1013904223u;
+static uint32_t gseed32u = 1u;
 
-static uint32_t gseed32 = 1;
-static uint32_t gLCGForml(void);
+static inline uint32_t gLGCrand(uint32_t *gseed)
+{
+    *gseed = lcga * *gseed + lcgc;
+    return *gseed;
+}
 
-uint16_t gSrand16(uint16_t g);
-uint8_t gSrand8(uint8_t g);
+static inline void gSrand(uint32_t g)
+{
+    gseed32u = g;
+}
 
-uint16_t gRand16(void);
-uint8_t gRand8(void);
+#if defined(RAND32)
+    typedef uint32_t uintg_t;
 
-uint16_t grandmod16(uint16_t n);
-uint8_t grandmod8(uint8_t n);
+    #define seedptr (&gseed32u)
+    #define GEXP_CASTR(x) ((uint32_t)(x) & GRANDVAL32)
+#elif defined(RAND16)
+    typedef uint16_t uintg_t;
+
+    #define seedptr (&gseed32u)
+    #define GEXP_CASTR(x) ((uint16_t)(ESHFT8(x) & GRANDVAL16))
+#elif defined(RAND8) || (!defined(RAND8) && !defined(RAND16) && !defined(RAND32))
+    #if !defined(RAND8) && !defined(RAND16) && !defined(RAND32)
+        #pragma message("rand type undef!... defaulting to 8bit")
+    #endif
+
+    typedef uint8_t uintg_t;
+
+    #define seedptr (&gseed32u)
+    #define GEXP_CASTR(x) ((uint8_t)(EBLENDXOR(x) & GRANDVAL8))
+#endif
+
+static inline uintg_t grand(void)
+{
+    return GEXP_CASTR(gLGCrand(seedptr));
+}
+
+static inline uintg_t grmod(uintg_t n)
+{
+    return grand() % n;
+}
 
 #endif

@@ -1,4 +1,4 @@
-SOURCES = core.cpp cppw/eplant.cpp cppw/eplayer.cpp cppw/epreys.cpp common/core/erand.c
+SOURCES = core.cpp cppw/eplant.cpp cppw/eplayer.cpp cppw/epreys.cpp #common/core/erand.c
 BIN = micro
 CPP = g++
 
