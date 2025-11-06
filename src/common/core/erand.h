@@ -3,11 +3,9 @@
 
 #include <stdint.h>
 
-#define GRANDVAL8 0xff
-#define GRANDVAL16 0xffff
-#define GRANDVAL32 0xffffffff
-
 #define RAND8
+#define MAXGRAND8
+
 #define ESHFT8(x) ((x) >> 8)
 #define EBLENDXOR(x) (((x) >> 8) ^ ((x) >> 16))
 
@@ -26,16 +24,26 @@ static inline void gSrand(uint32_t g)
     gseed32u = g;
 }
 
+#if defined(MAXGRAND32)
+    #define GLIMR 0xffffffff
+#elif defined(MAXGRAND16)
+    #define GLIMR 0xffff
+#elif defined(MAXGRAND8) || (!defined(MAXGRAND8) && !defined(MAXGRAND16) && !defined(MAXGRAND32))
+    #if !defined(MAXGRAND8) && !defined(MAXGRAND16) && !defined(MAXGRAND32)
+        #pragma message("no RANDMAX mode defined!... defaulting to 8bit")
+    #endif
+    #define GLIMR 0xff
+#endif
 #if defined(RAND32)
     typedef uint32_t uintg_t;
 
     #define seedptr (&gseed32u)
-    #define GEXP_CASTR(x) ((uint32_t)(x) & GRANDVAL32)
+    #define GEXP_CASTR(x) ((uint32_t)(x) & GLIMR)
 #elif defined(RAND16)
     typedef uint16_t uintg_t;
 
     #define seedptr (&gseed32u)
-    #define GEXP_CASTR(x) ((uint16_t)(ESHFT8(x) & GRANDVAL16))
+    #define GEXP_CASTR(x) ((uint16_t)(ESHFT8(x) & GLIMR))
 #elif defined(RAND8) || (!defined(RAND8) && !defined(RAND16) && !defined(RAND32))
     #if !defined(RAND8) && !defined(RAND16) && !defined(RAND32)
         #pragma message("rand type undef!... defaulting to 8bit")
@@ -44,7 +52,7 @@ static inline void gSrand(uint32_t g)
     typedef uint8_t uintg_t;
 
     #define seedptr (&gseed32u)
-    #define GEXP_CASTR(x) ((uint8_t)(EBLENDXOR(x) & GRANDVAL8))
+    #define GEXP_CASTR(x) ((uint8_t)(EBLENDXOR(x) & GLIMR))
 #endif
 
 static inline uintg_t grand(void)
