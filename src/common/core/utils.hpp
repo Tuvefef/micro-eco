@@ -13,6 +13,11 @@ const int gprey0 = 5;
 
 using incvar = std::variant<int, char>;
 
+inline double gpowx2(double g)
+{
+    return g * g; 
+}
+
 template <typename T>
 T minn(T x, T y)
 {

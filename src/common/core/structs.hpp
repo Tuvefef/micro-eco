@@ -8,6 +8,9 @@ struct sCreatureCoord
 
     int pyx0;
     int pyy0;
+
+    int prx0;
+    int pry0;
 };
 
 struct sCreatureEnergy

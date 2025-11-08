@@ -5,7 +5,6 @@
 
 #include "core/utils.hpp"
 #include "core/structs.hpp"
-#include "core/erand.h"
 
 class CreatureMove
 {

@@ -6,11 +6,11 @@
 #include "common/core/utils.hpp"
 #include "common/core/structs.hpp"
 #include "common/console.hpp"
-#include "common/core/erand.h"
 
 #include "common/eplant.hpp"
 #include "common/eplayer.hpp"
 #include "common/epreys.hpp"
+#include "common/epred.hpp"
 
 void setNCursesBool(bool e)
 {
@@ -46,6 +46,8 @@ void renderChars(sCreatureCoord &scc, sPlantsCoord &spc)
                 std::cout << console::greenb << "* " << console::reset;
             else if(i == scc.pyy0 && j == scc.pyx0)
                 std::cout << console::yellowb << "~ " << console::reset;
+            else if(i == scc.pry0 && j == scc.prx0)
+                std::cout << console::redb << "? " << console::reset;
             else 
                 std::cout << console::green << ". " << console::reset; 
         }
@@ -61,6 +63,7 @@ int main()
 
     PlayerRender rplayer;
     PreyRender0 prey0;
+    PredatorRender0 pred0;
     SafePlant splants;
     PoisonousPlant pplants;
 
@@ -69,12 +72,13 @@ int main()
     std::cout << "press enter to star\n";
     std::cin.get();
 
-    gSrand(time(nullptr));
+    srand(time(nullptr));
 
     scc.plx = WIDTH / 2;
     scc.ply = HEIGHT / 2;
 
     prey0.creatureSpawn(scc);
+    pred0.creatureSpawn(scc);
 
     splants.spawnPlants(scc, spc);
     pplants.spawnPlants(scc, spc);
@@ -87,8 +91,10 @@ int main()
         
         renderChars(scc, spc);
         rplayer.creatureMove(scc, &sce, getkeys());
-        prey0.creatureMove(scc, nullptr, static_cast<int>(grmod(gprey0)));
+        prey0.creatureMove(scc, nullptr, rand() % 5);
+        pred0.creatureMove(scc, nullptr, 0);
         rplayer.creatureEat(scc, &sce);
+        pred0.creatureEat(scc, &sce);
         rplayer.playerLowEnerg(sce);
 
         splants.consumePlant(scc, spc, sce);

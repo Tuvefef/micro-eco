@@ -2,7 +2,6 @@
 #define ENABLEPLANTSINC
 
 #include "plants.hpp"
-#include "core/erand.h"
 
 class SafePlant : public Plants
 {

@@ -29,7 +29,7 @@ void PreyRender0::creatureSpawn(sCreatureCoord &scc)
 {
     do
     {
-        scc.pyx0 = grmod(WIDTH);
-        scc.pyy0 = grmod(HEIGHT);
+        scc.pyx0 = rand() % WIDTH;
+        scc.pyy0 = rand() % HEIGHT;
     } while(scc.pyx0 == scc.plx && scc.pyy0 == scc.ply);
 }
