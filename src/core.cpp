@@ -62,7 +62,7 @@ int main()
     sCreatureEnergy sce;
 
     PlayerRender rplayer;
-    PreyRender0 prey0;
+    PreyRender0 prey0(&spc);
     PredatorRender0 pred0;
     SafePlant splants;
     PoisonousPlant pplants;
@@ -92,8 +92,9 @@ int main()
         renderChars(scc, spc);
         rplayer.creatureMove(scc, &sce, getkeys());
         prey0.creatureMove(scc, nullptr, rand() % 5);
-        pred0.creatureMove(scc, nullptr, 0);
+        pred0.creatureMove(scc, nullptr, rand() % 4);
         rplayer.creatureEat(scc, &sce);
+        prey0.eatPlant(spc, scc);
         pred0.creatureEat(scc, &sce);
         rplayer.playerLowEnerg(sce);
 

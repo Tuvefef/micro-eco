@@ -1,6 +1,10 @@
 #include "../common/epred.hpp"
 #include "../common/epreys.hpp"
 
+PredatorRender0::PredatorRender0() :
+    stimer(0), isChasing(false)
+{}
+
 void PredatorRender0::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, incvar inc)
 {
     float dx1 = scc.plx - scc.prx0;
@@ -14,11 +18,40 @@ void PredatorRender0::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, in
     float gtargx = (gcoord1 < gcoord2) ? scc.plx : scc.pyx0;
     float gtargy = (gcoord1 < gcoord2) ? scc.ply : scc.pyy0;
 
-    if      (scc.prx0 < gtargx) scc.prx0++;
-    else if (scc.prx0 > gtargx) scc.prx0--;
+    if(++stimer > (15 + rand() % 10))
+    {
+        stimer = 0;
+        if(rand() % 100 < 7)
+            isChasing = !isChasing;
+    }
 
-    if      (scc.pry0 < gtargy) scc.pry0++;
-    else if (scc.pry0 > gtargy) scc.pry0--;
+    if(!isChasing)
+    {
+        if(std::holds_alternative<int>(inc))
+        {
+            int coord = std::get<int>(inc);
+            switch (coord)
+            {
+                case 0: scc.pry0--;
+                    break;
+                case 1: scc.pry0++;
+                    break;
+                case 2: scc.prx0--;
+                    break;
+                case 3: scc.prx0++;
+                    break;
+        
+                default:
+                    break;
+            }
+        }
+    } else {
+        if      (scc.prx0 < gtargx) scc.prx0++;
+        else if (scc.prx0 > gtargx) scc.prx0--;
+
+        if      (scc.pry0 < gtargy) scc.pry0++;
+        else if (scc.pry0 > gtargy) scc.pry0--;
+    }
 
     scc.prx0 = maxn(0, minn(WIDTH - 1, scc.prx0));
     scc.pry0 = maxn(0, minn(HEIGHT - 1, scc.pry0));
@@ -26,7 +59,7 @@ void PredatorRender0::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, in
 
 void PredatorRender0::creatureEat(sCreatureCoord &scc, sCreatureEnergy *sce)
 {
-    PreyRender0 prey0;
+    PreyRender0 prey0(nullptr);
     if((scc.prx0 == scc.plx && scc.pry0 == scc.ply) || 
     (scc.prx0 == scc.pyx0 && scc.pry0 == scc.pyy0))
     {

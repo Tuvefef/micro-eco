@@ -29,7 +29,7 @@ void PlayerRender::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, incva
 
 void PlayerRender::creatureEat(sCreatureCoord &scc, sCreatureEnergy *sce)
 {
-    PreyRender0 rprey;
+    PreyRender0 rprey(nullptr);
     if(scc.plx == scc.pyx0 && scc.ply == scc.pyy0)
     {
         sce->generg += 8;
