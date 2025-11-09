@@ -17,10 +17,10 @@ void PreyRender0::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, incvar
         }
     } 
     else {
-        if (++stimer > (15 + rand() % 10)) 
+        if (++stimer > (15 + grmod(10))) 
         { 
             stimer = 0; 
-            if (rand() % 100 < 16 && spctrg) 
+            if (grmod(100) < 16 && spctrg) 
             {
                 isChasing = true; 
                 chaseTimer = 0;
@@ -64,8 +64,8 @@ void PreyRender0::creatureSpawn(sCreatureCoord &scc)
 {
     do
     {
-        scc.pyx0 = rand() % WIDTH;
-        scc.pyy0 = rand() % HEIGHT;
+        scc.pyx0 = grmod(WIDTH);
+        scc.pyy0 = grmod(HEIGHT);
     } while(scc.pyx0 == scc.plx && scc.pyy0 == scc.ply);
 }
 

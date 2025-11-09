@@ -18,10 +18,10 @@ void PredatorRender0::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, in
     float gtargx = (gcoord1 < gcoord2) ? scc.plx : scc.pyx0;
     float gtargy = (gcoord1 < gcoord2) ? scc.ply : scc.pyy0;
 
-    if(++stimer > (15 + rand() % 10))
+    if(++stimer > (15 + grmod(10)))
     {
         stimer = 0;
-        if(rand() % 100 < 7)
+        if(grmod(100) < 7)
             isChasing = !isChasing;
     }
 
@@ -72,8 +72,8 @@ void PredatorRender0::creatureSpawn(sCreatureCoord &scc)
 {
     do
     {
-        scc.prx0 = rand() % WIDTH;
-        scc.pry0 = rand() % HEIGHT;
+        scc.prx0 = grmod(WIDTH);
+        scc.pry0 = grmod(HEIGHT);
     } while (scc.prx0 == scc.plx && scc.pry0 == scc.ply);
     
 }

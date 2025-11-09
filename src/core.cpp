@@ -5,6 +5,7 @@
 
 #include "common/core/utils.hpp"
 #include "common/core/structs.hpp"
+#include "common/core/grand.h"
 #include "common/console.hpp"
 
 #include "common/eplant.hpp"
@@ -72,7 +73,7 @@ int main()
     std::cout << "press enter to star\n";
     std::cin.get();
 
-    srand(time(nullptr));
+    gsrand(time(nullptr));
 
     scc.plx = WIDTH / 2;
     scc.ply = HEIGHT / 2;
@@ -91,8 +92,8 @@ int main()
         
         renderChars(scc, spc);
         rplayer.creatureMove(scc, &sce, getkeys());
-        prey0.creatureMove(scc, nullptr, rand() % 5);
-        pred0.creatureMove(scc, nullptr, rand() % 4);
+        prey0.creatureMove(scc, nullptr, static_cast<int>(grmod(5)));
+        pred0.creatureMove(scc, nullptr, static_cast<int>(grmod(4)));
         rplayer.creatureEat(scc, &sce);
         prey0.eatPlant(spc, scc);
         pred0.creatureEat(scc, &sce);
