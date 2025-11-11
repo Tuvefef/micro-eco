@@ -66,9 +66,9 @@ int main()
     sCreatureEnergy sce;
     MushroomCoord m;
 
-    PlayerRender rplayer(scc, sce, spc);
-    PreyRender0 prey0(spc, scc, sce);
-    PredatorRender0 pred0(scc, sce, spc);
+    PlayerRender rplayer(scc, sce, spc, m);
+    PreyRender0 prey0(spc, scc, sce, m);
+    PredatorRender0 pred0(scc, sce, spc, m);
     SafePlant splants(scc, sce, spc);
     PoisonousPlant pplants(scc, sce, spc);
     SafeMushroom sm(scc, spc, sce, m);
@@ -104,7 +104,7 @@ int main()
         pred0.creatureMove(static_cast<int>(grmod(4)));
 
         rplayer.creatureEat();
-        prey0.eatPlant();
+        prey0.eat();
         pred0.creatureEat();
         rplayer.playerLowEnerg();
 

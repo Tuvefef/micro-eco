@@ -1,8 +1,8 @@
 #include "../common/epred.hpp"
 #include "../common/epreys.hpp"
 
-PredatorRender0::PredatorRender0(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref) :
-    stimer(0), isChasing(false), chaseTimer(0), scc(sccref), sce(sceref), spc(spcref)
+PredatorRender0::PredatorRender0(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref, MushroomCoord &mref) :
+    stimer(0), isChasing(false), chaseTimer(0), scc(sccref), sce(sceref), spc(spcref), m(mref)
 {}
 
 void PredatorRender0::creatureMove(incvar inc)
@@ -72,7 +72,7 @@ void PredatorRender0::creatureMove(incvar inc)
 
 void PredatorRender0::creatureEat()
 {
-    PreyRender0 prey0(spc, scc, sce);
+    PreyRender0 prey0(spc, scc, sce, m);
     if((scc.prx0 == scc.plx && scc.pry0 == scc.ply) || 
     (scc.prx0 == scc.pyx0 && scc.pry0 == scc.pyy0))
     {

@@ -1,6 +1,6 @@
 #include "../common/safemush.hpp"
 
-SafeMushroom::SafeMushroom(const sCreatureCoord &sccref, const sPlantsCoord &spcref, sCreatureEnergy &sceref, MushroomCoord &mref) :
+SafeMushroom::SafeMushroom(sCreatureCoord &sccref, sPlantsCoord &spcref, sCreatureEnergy &sceref, MushroomCoord &mref) :
     scc(sccref), spc(spcref), sce(sceref), m(mref)
 {}
 

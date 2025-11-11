@@ -15,7 +15,7 @@ void SafePlant::spawnPlants()
         spc.psx = grmod(WIDTH);
         spc.psy = grmod(HEIGHT);
     } while(spc.psx == scc.plx && spc.psy == scc.ply);
-    
+
 }
 
 void SafePlant::consumePlant()

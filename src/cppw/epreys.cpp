@@ -1,12 +1,24 @@
 #include "../common/epreys.hpp"
+#include "../common/safemush.hpp"
 #include "../common/eplant.hpp"
 
-PreyRender0::PreyRender0(sPlantsCoord &spcref, sCreatureCoord &sccref, sCreatureEnergy &sceref) : 
-    spc(spcref), scc(sccref), sce(sceref), stimer(0), isChasing(false), chaseTimer(0)
+PreyRender0::PreyRender0(sPlantsCoord &spcref, sCreatureCoord &sccref, sCreatureEnergy &sceref, MushroomCoord &mref) : 
+    spc(spcref), scc(sccref), sce(sceref), m(mref), stimer(0), isChasing(false), chaseTimer(0)
 {}
 
 void PreyRender0::creatureMove(incvar inc)
 {
+    float gdx1 = scc.pyx0 - spc.psx;
+    float gdy1 = scc.pyy0 - spc.psy;
+    float gdx2 = scc.pyx0 - m.msx;
+    float gdy2 = scc.pyy0 - m.msy;
+
+    float gcoord1 = gpowx2(gdx1) + gpowx2(gdy1);
+    float gcoord2 = gpowx2(gdx2) + gpowx2(gdy2);
+
+    float gtargx = (gcoord1 < gcoord2) ? spc.psx : m.msx;
+    float gtargy = (gcoord1 < gcoord2) ? spc.psy : m.msy;
+
     if (isChasing)
     {
         chaseTimer++;
@@ -48,11 +60,11 @@ void PreyRender0::creatureMove(incvar inc)
             }
         }
     } else {
-        if     (scc.pyx0 < spc.psx) scc.pyx0++;
-        else if(scc.pyx0 > spc.psx) scc.pyx0--;
+        if     (scc.pyx0 < gtargx) scc.pyx0++;
+        else if(scc.pyx0 > gtargx) scc.pyx0--;
 
-        if     (scc.pyy0 < spc.psy) scc.pyy0++;
-        else if(scc.pyy0 > spc.psy) scc.pyy0--;
+        if     (scc.pyy0 < gtargy) scc.pyy0++;
+        else if(scc.pyy0 > gtargy) scc.pyy0--;
     }
 
     scc.pyx0 = maxn(0, minn(WIDTH - 1, scc.pyx0));
@@ -68,11 +80,16 @@ void PreyRender0::creatureSpawn()
     } while(scc.pyx0 == scc.plx && scc.pyy0 == scc.ply);
 }
 
-void PreyRender0::eatPlant()
+void PreyRender0::eat()
 {
     SafePlant splant(scc, sce, spc);
-    if(scc.pyx0 == spc.psx && scc.pyy0 == spc.psy)
+    SafeMushroom sm(scc, spc, sce, m);
+    if(
+        (scc.pyx0 == spc.psx && scc.pyy0 == spc.psy) ||
+        (scc.pyx0 == m.msx && scc.pyy0 == m.msy)
+    )
     {
         splant.spawnPlants();
+        sm.spawnMush();
     }
 }

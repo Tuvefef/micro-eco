@@ -6,14 +6,14 @@
 class SafeMushroom : public Mushroom
 {
     private:
-        const sCreatureCoord &scc;
-        const sPlantsCoord &spc;
+        sCreatureCoord &scc;
+        sPlantsCoord &spc;
         sCreatureEnergy &sce;
         MushroomCoord &m;
     public:
         void spawnMush() override;
         void consumeMush() override;
-        SafeMushroom(const sCreatureCoord &sccref, const sPlantsCoord &spcref, sCreatureEnergy &sceref, MushroomCoord &mref);
+        SafeMushroom(sCreatureCoord &sccref, sPlantsCoord &spcref, sCreatureEnergy &sceref, MushroomCoord &mref);
 };
 
 #endif

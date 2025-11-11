@@ -9,14 +9,15 @@ class PreyRender0 : public CreatureMove, public SpawnCreature
         sPlantsCoord &spc;
         sCreatureCoord &scc;
         sCreatureEnergy &sce;
+        MushroomCoord &m;
         int stimer;
         bool isChasing;
         int chaseTimer;
     public:
         void creatureMove(incvar inc) override;
         void creatureSpawn() override;
-        void eatPlant();
-        PreyRender0(sPlantsCoord &spcref, sCreatureCoord &sccref, sCreatureEnergy &sceref);
+        void eat();
+        PreyRender0(sPlantsCoord &spcref, sCreatureCoord &sccref, sCreatureEnergy &sceref, MushroomCoord &mref);
 };
 
 #endif

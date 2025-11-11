@@ -1,7 +1,7 @@
 #include "../common/eplayer.hpp"
 
-PlayerRender::PlayerRender(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref) :
-    scc(sccref), sce(sceref), spc(spcref)
+PlayerRender::PlayerRender(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref, MushroomCoord &mref) :
+    scc(sccref), sce(sceref), spc(spcref), m(mref)
 {}
 
 void PlayerRender::creatureMove(incvar inc)
@@ -33,7 +33,7 @@ void PlayerRender::creatureMove(incvar inc)
 
 void PlayerRender::creatureEat()
 {
-    PreyRender0 rprey(spc, scc, sce);
+    PreyRender0 rprey(spc, scc, sce, m);
     if(scc.plx == scc.pyx0 && scc.ply == scc.pyy0)
     {
         sce.generg += 15;
