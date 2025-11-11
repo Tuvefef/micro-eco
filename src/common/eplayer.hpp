@@ -6,12 +6,17 @@
 
 class PlayerRender : public CreatureMove, public CreatureEat
 {
+    private:
+        sCreatureCoord &scc;
+        sCreatureEnergy &sce;
+        sPlantsCoord &spc;
     public:
-        void creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, incvar inc) override;
-        void creatureEat(sCreatureCoord &scc, sCreatureEnergy *sce) override;
+        void creatureMove(incvar inc) override;
+        void creatureEat() override;
 
-        int playerLowEnerg(sCreatureEnergy &sce) const;
-        int playerDead(const sCreatureEnergy &sce) const;
+        int playerLowEnerg() const;
+        int playerDead() const;
+        PlayerRender(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref);
 };
 
 #endif

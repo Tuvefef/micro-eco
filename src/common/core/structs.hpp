@@ -27,4 +27,10 @@ struct sPlantsCoord
     int ppy;
 };
 
+struct MushroomCoord
+{
+    int msx;
+    int msy;
+};
+
 #endif

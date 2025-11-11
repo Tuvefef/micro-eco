@@ -1,6 +1,10 @@
 #include "../common/eplayer.hpp"
 
-void PlayerRender::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, incvar inc)
+PlayerRender::PlayerRender(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref) :
+    scc(sccref), sce(sceref), spc(spcref)
+{}
+
+void PlayerRender::creatureMove(incvar inc)
 {
     if(std::holds_alternative<char>(inc))
     {
@@ -15,7 +19,7 @@ void PlayerRender::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, incva
                 break;
             case 'd': scc.plx++;
                 break;
-            case 'q': if(sce)sce->generg = 0;
+            case 'q': sce.generg = 0;
                 break;
     
             default:
@@ -27,22 +31,22 @@ void PlayerRender::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, incva
     }
 }
 
-void PlayerRender::creatureEat(sCreatureCoord &scc, sCreatureEnergy *sce)
+void PlayerRender::creatureEat()
 {
-    PreyRender0 rprey(nullptr);
+    PreyRender0 rprey(spc, scc, sce);
     if(scc.plx == scc.pyx0 && scc.ply == scc.pyy0)
     {
-        sce->generg += 8;
-        rprey.creatureSpawn(scc);
+        sce.generg += 15;
+        rprey.creatureSpawn();
     }
 }
 
-int PlayerRender::playerLowEnerg(sCreatureEnergy &sce) const
+int PlayerRender::playerLowEnerg() const
 {
     return sce.generg--;
 }
 
-int PlayerRender::playerDead(const sCreatureEnergy &sce) const
+int PlayerRender::playerDead() const
 {
     return sce.generg <= 0;
 }

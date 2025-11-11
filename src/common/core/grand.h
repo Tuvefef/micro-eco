@@ -5,21 +5,23 @@
 
 #define LCG0 1664525u
 #define LCG1 1013904223u
-#define LIMR 0xffu
-#define gblend8(g) ((uint8_t)((((g) ^ ((g) >> 8)) ^ (((g) ^ ((g) >> 8)) >> 16))))
+#define LIMG 0xffu
+
+#define MIX8(g) ((uint8_t)(((g) >> 24) ^ ((g) >> 16) ^ ((g) >> 8) ^ (g)))
+#define XORBLEND(g) (((g) ^ ((g) >> 8)) ^ (((g) ^ ((g) >> 8)) >> 16))
 
 static uint32_t gseed = 1u;
 
 static inline uint32_t glcgforml(uint32_t *m)
 {
-    *m = LCG0 * (*m) + LCG1;
+    *m = (uint32_t)(LCG0 * (*m) + LCG1);
     return *m;
 }
 
 static inline uint8_t grand(void)
 {
     uint32_t g = glcgforml(&gseed);
-    return gblend8(g);
+    return MIX8(g);
 }
 
 static inline void gsrand(uint32_t g)
@@ -29,12 +31,18 @@ static inline void gsrand(uint32_t g)
 
 static inline uint32_t grmod(uint32_t m)
 {
-    return m ? (grand() % m) : 0u;
+    if(!m) return 0u;
+    uint32_t g = glcgforml(&gseed);
+
+    //  g ^= g >> 8;
+    //  g ^= g >> 16;
+
+    return XORBLEND(g) % m;
 }
 
 static inline float grandf(void)
 {
-    return (float)grand() / (float)(LIMR);
+    return (float)grand() / 256.0f;
 }
 
 #endif

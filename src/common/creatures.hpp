@@ -10,21 +10,21 @@
 class CreatureMove
 {
     public:
-        virtual void creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, incvar inc) = 0;
+        virtual void creatureMove(incvar inc) = 0;
         virtual ~CreatureMove() = default;
 };
 
 class SpawnCreature
 {
     public:
-        virtual void creatureSpawn(sCreatureCoord &scc) = 0;
+        virtual void creatureSpawn() = 0;
         virtual ~SpawnCreature() = default;
 };
 
 class CreatureEat 
 {
     public:
-        virtual void creatureEat(sCreatureCoord &scc, sCreatureEnergy *sce) = 0;
+        virtual void creatureEat() = 0;
         virtual ~CreatureEat() = default;
 };
 

@@ -6,13 +6,17 @@
 class PredatorRender0 : public CreatureMove, public CreatureEat, public SpawnCreature
 {
     private:
+        sCreatureCoord &scc;
+        sCreatureEnergy &sce;
+        sPlantsCoord &spc;
         int stimer;
         bool isChasing;
+        int chaseTimer;
     public:
-        void creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, incvar inc) override;
-        void creatureEat(sCreatureCoord &scc, sCreatureEnergy *sce) override;
-        void creatureSpawn(sCreatureCoord &scc) override;
-        PredatorRender0();
+        void creatureMove(incvar inc) override;
+        void creatureEat() override;
+        void creatureSpawn() override;
+        PredatorRender0(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref);
 };
 
 #endif

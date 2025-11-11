@@ -1,6 +1,14 @@
 #include "../common/eplant.hpp"
 
-void SafePlant::spawnPlants(sCreatureCoord &scc, sPlantsCoord &spc)
+SafePlant::SafePlant(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref) :
+    scc(sccref), sce(sceref), spc(spcref)
+{}
+
+PoisonousPlant::PoisonousPlant(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref) :
+    scc(sccref), sce(sceref), spc(spcref)
+{}
+
+void SafePlant::spawnPlants()
 {
     do
     {
@@ -10,16 +18,16 @@ void SafePlant::spawnPlants(sCreatureCoord &scc, sPlantsCoord &spc)
     
 }
 
-void SafePlant::consumePlant(sCreatureCoord &scc, sPlantsCoord &spc, sCreatureEnergy &sce)
+void SafePlant::consumePlant()
 {
     if(scc.plx == spc.psx && scc.ply == spc.psy)
     {
         sce.generg += 3;
-        spawnPlants(scc, spc);
+        spawnPlants();
     }
 }
 
-void PoisonousPlant::spawnPlants(sCreatureCoord &scc, sPlantsCoord &spc)
+void PoisonousPlant::spawnPlants()
 {
     do
     {
@@ -29,11 +37,11 @@ void PoisonousPlant::spawnPlants(sCreatureCoord &scc, sPlantsCoord &spc)
     
 }
 
-void PoisonousPlant::consumePlant(sCreatureCoord &scc, sPlantsCoord &spc, sCreatureEnergy &sce)
+void PoisonousPlant::consumePlant()
 {
     if(scc.plx == spc.ppx && scc.ply == spc.ppy)
     {
         sce.generg -= 3;
-        spawnPlants(scc, spc);
+        spawnPlants();
     }
 }

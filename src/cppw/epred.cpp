@@ -1,11 +1,11 @@
 #include "../common/epred.hpp"
 #include "../common/epreys.hpp"
 
-PredatorRender0::PredatorRender0() :
-    stimer(0), isChasing(false)
+PredatorRender0::PredatorRender0(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref) :
+    stimer(0), isChasing(false), chaseTimer(0), scc(sccref), sce(sceref), spc(spcref)
 {}
 
-void PredatorRender0::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, incvar inc)
+void PredatorRender0::creatureMove(incvar inc)
 {
     float dx1 = scc.plx - scc.prx0;
     float dy1 = scc.ply - scc.pry0;
@@ -18,11 +18,24 @@ void PredatorRender0::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, in
     float gtargx = (gcoord1 < gcoord2) ? scc.plx : scc.pyx0;
     float gtargy = (gcoord1 < gcoord2) ? scc.ply : scc.pyy0;
 
-    if(++stimer > (15 + grmod(10)))
+    if(isChasing)
     {
-        stimer = 0;
-        if(grmod(100) < 7)
-            isChasing = !isChasing;
+        chaseTimer++;
+        if(chaseTimer >= 10)
+        {
+            isChasing = false;
+            chaseTimer = 0;
+        }
+    } else {
+        if(++stimer > (15 + grmod(10))) 
+        { 
+            stimer = 0; 
+            if(grmod(100) < 16) 
+            {
+                isChasing = true; 
+                chaseTimer = 0;
+            }
+        }
     }
 
     if(!isChasing)
@@ -57,18 +70,18 @@ void PredatorRender0::creatureMove(sCreatureCoord &scc, sCreatureEnergy *sce, in
     scc.pry0 = maxn(0, minn(HEIGHT - 1, scc.pry0));
 }
 
-void PredatorRender0::creatureEat(sCreatureCoord &scc, sCreatureEnergy *sce)
+void PredatorRender0::creatureEat()
 {
-    PreyRender0 prey0(nullptr);
+    PreyRender0 prey0(spc, scc, sce);
     if((scc.prx0 == scc.plx && scc.pry0 == scc.ply) || 
     (scc.prx0 == scc.pyx0 && scc.pry0 == scc.pyy0))
     {
-        sce->generg -= 20;
-        prey0.creatureSpawn(scc);
+        sce.generg -= 5;
+        prey0.creatureSpawn();
     } 
 }
 
-void PredatorRender0::creatureSpawn(sCreatureCoord &scc)
+void PredatorRender0::creatureSpawn()
 {
     do
     {
