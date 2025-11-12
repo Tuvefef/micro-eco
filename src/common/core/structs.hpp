@@ -31,6 +31,22 @@ struct MushroomCoord
 {
     int msx;
     int msy;
+    int mtx;
+    int mty;
+    int mhx;
+    int mhy;
+};
+
+struct Hallucinogen
+{
+    int hticks = 0;
+    bool isHallucination = false;
+};
+
+struct RocksCoord
+{
+    int rx;
+    int ry;
 };
 
 #endif

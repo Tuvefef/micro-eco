@@ -1,20 +1,19 @@
-#ifndef MUSHROOMLOGICH
-#define MUSHROOMLOGICH
+#ifndef TOXICMUSHLOGICH
+#define TOXICMUSHLOGICH
 
 #include "mushroom.hpp"
 
-class SafeMushroom : public Mushroom
+class ToxicMushroom : public Mushroom
 {
     private:
         sCreatureCoord &scc;
-        sPlantsCoord &spc;
         sCreatureEnergy &sce;
         MushroomCoord &m;
         std::vector<RocksCoord> &grock;
     public:
         void spawnMush() override;
         void consumeMush() override;
-        SafeMushroom(sCreatureCoord &sccref, sPlantsCoord &spcref, sCreatureEnergy &sceref, MushroomCoord &mref, std::vector<RocksCoord> &rref);
+        ToxicMushroom(sCreatureCoord &sccref, sCreatureEnergy &sceref, MushroomCoord &mref, std::vector<RocksCoord> &rref);
 };
 
 #endif

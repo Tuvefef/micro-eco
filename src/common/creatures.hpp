@@ -1,7 +1,8 @@
 #ifndef CREATURESH
 #define CREATURESH
 
-#include <cstdlib>
+#include <algorithm>
+#include <vector>
 
 #include "core/utils.hpp"
 #include "core/structs.hpp"

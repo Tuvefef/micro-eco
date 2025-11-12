@@ -1,7 +1,7 @@
 #include "../common/safemush.hpp"
 
-SafeMushroom::SafeMushroom(sCreatureCoord &sccref, sPlantsCoord &spcref, sCreatureEnergy &sceref, MushroomCoord &mref) :
-    scc(sccref), spc(spcref), sce(sceref), m(mref)
+SafeMushroom::SafeMushroom(sCreatureCoord &sccref, sPlantsCoord &spcref, sCreatureEnergy &sceref, MushroomCoord &mref, std::vector<RocksCoord> &rref) :
+    scc(sccref), spc(spcref), sce(sceref), m(mref), grock(rref)
 {}
 
 void SafeMushroom::spawnMush()
@@ -11,6 +11,7 @@ void SafeMushroom::spawnMush()
         m.msx = grmod(WIDTH);
         m.msy = grmod(HEIGHT);
     } while(
+        std::any_of(grock.begin(), grock.end(), [&](RocksCoord r){ return r.rx == m.msx && r.ry == m.msy;}) || 
         (m.msx == scc.plx && m.msy == scc.ply)   ||
         (m.msx == scc.pyx0 && m.msy == scc.pyy0) ||
         (m.msx == scc.prx0 && m.msy == scc.pry0) ||

@@ -1,8 +1,8 @@
 #include "../common/epred.hpp"
 #include "../common/epreys.hpp"
 
-PredatorRender0::PredatorRender0(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref, MushroomCoord &mref) :
-    stimer(0), isChasing(false), chaseTimer(0), scc(sccref), sce(sceref), spc(spcref), m(mref)
+PredatorRender0::PredatorRender0(sCreatureCoord &sccref, sCreatureEnergy &sceref, sPlantsCoord &spcref, MushroomCoord &mref, std::vector<RocksCoord> &rref) :
+    stimer(0), isChasing(false), chaseTimer(0), scc(sccref), sce(sceref), spc(spcref), m(mref), grock(rref)
 {}
 
 void PredatorRender0::creatureMove(incvar inc)
@@ -18,6 +18,9 @@ void PredatorRender0::creatureMove(incvar inc)
     float gtargx = (gcoord1 < gcoord2) ? scc.plx : scc.pyx0;
     float gtargy = (gcoord1 < gcoord2) ? scc.ply : scc.pyy0;
 
+    int newX = scc.prx0;
+    int newY = scc.pry0;
+
     if(isChasing)
     {
         chaseTimer++;
@@ -26,7 +29,9 @@ void PredatorRender0::creatureMove(incvar inc)
             isChasing = false;
             chaseTimer = 0;
         }
-    } else {
+    } 
+    else 
+    {
         if(++stimer > (15 + grmod(10))) 
         { 
             stimer = 0; 
@@ -45,34 +50,38 @@ void PredatorRender0::creatureMove(incvar inc)
             int coord = std::get<int>(inc);
             switch (coord)
             {
-                case 0: scc.pry0--;
-                    break;
-                case 1: scc.pry0++;
-                    break;
-                case 2: scc.prx0--;
-                    break;
-                case 3: scc.prx0++;
-                    break;
-        
-                default:
-                    break;
+                case 0: newY--; break; 
+                case 1: newY++; break; 
+                case 2: newX--; break; 
+                case 3: newX++; break; 
             }
         }
-    } else {
-        if      (scc.prx0 < gtargx) scc.prx0++;
-        else if (scc.prx0 > gtargx) scc.prx0--;
+    } 
+    else 
+    {
+        if      (newX < gtargx) newX++;
+        else if (newX > gtargx) newX--;
 
-        if      (scc.pry0 < gtargy) scc.pry0++;
-        else if (scc.pry0 > gtargy) scc.pry0--;
+        if      (newY < gtargy) newY++;
+        else if (newY > gtargy) newY--;
     }
 
-    scc.prx0 = maxn(0, minn(WIDTH - 1, scc.prx0));
-    scc.pry0 = maxn(0, minn(HEIGHT - 1, scc.pry0));
+    newX = maxn(0, minn(WIDTH - 1, newX));
+    newY = maxn(0, minn(HEIGHT - 1, newY));
+
+    if(std::none_of(grock.begin(), grock.end(), [&](RocksCoord r){
+        return r.rx == newX && r.ry == newY;
+    }))
+    {
+        scc.prx0 = newX;
+        scc.pry0 = newY;
+    }
 }
+
 
 void PredatorRender0::creatureEat()
 {
-    PreyRender0 prey0(spc, scc, sce, m);
+    PreyRender0 prey0(spc, scc, sce, m, grock);
     if((scc.prx0 == scc.plx && scc.pry0 == scc.ply) || 
     (scc.prx0 == scc.pyx0 && scc.pry0 == scc.pyy0))
     {

@@ -13,6 +13,7 @@ namespace console
     std::string cyan = "\033[36m";
     std::string yellow = "\033[33m";
     std::string yellowb = "\033[33m\033[6m";
+    std::string purple = "\033[35m";
 
     std::string consoleClean = "\033[2J\033[H";
 };// namespace console

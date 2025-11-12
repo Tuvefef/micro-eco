@@ -1,4 +1,4 @@
-SOURCES = core.cpp cppw/eplant.cpp cppw/eplayer.cpp cppw/epreys.cpp cppw/epred.cpp cppw/safemush.cpp
+SOURCES = core.cpp cppw/eplant.cpp cppw/eplayer.cpp cppw/epreys.cpp cppw/epred.cpp cppw/safemush.cpp cppw/toxicmush.cpp cppw/hallmush.cpp
 BIN = micro
 CPP = g++
 

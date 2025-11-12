@@ -2,8 +2,8 @@
 #include "../common/safemush.hpp"
 #include "../common/eplant.hpp"
 
-PreyRender0::PreyRender0(sPlantsCoord &spcref, sCreatureCoord &sccref, sCreatureEnergy &sceref, MushroomCoord &mref) : 
-    spc(spcref), scc(sccref), sce(sceref), m(mref), stimer(0), isChasing(false), chaseTimer(0)
+PreyRender0::PreyRender0(sPlantsCoord &spcref, sCreatureCoord &sccref, sCreatureEnergy &sceref, MushroomCoord &mref, std::vector<RocksCoord> &rref) : 
+    spc(spcref), scc(sccref), sce(sceref), m(mref), stimer(0), isChasing(false), chaseTimer(0), grock(rref)
 {}
 
 void PreyRender0::creatureMove(incvar inc)
@@ -83,7 +83,7 @@ void PreyRender0::creatureSpawn()
 void PreyRender0::eat()
 {
     SafePlant splant(scc, sce, spc);
-    SafeMushroom sm(scc, spc, sce, m);
+    SafeMushroom sm(scc, spc, sce, m, grock);
     if(
         (scc.pyx0 == spc.psx && scc.pyy0 == spc.psy) ||
         (scc.pyx0 == m.msx && scc.pyy0 == m.msy)

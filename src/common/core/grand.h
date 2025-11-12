@@ -5,7 +5,7 @@
 
 #define LCG0 1664525u
 #define LCG1 1013904223u
-#define LIMG 0xffu
+#define LIMG 0xff
 
 #define MIX8(g) ((uint8_t)(((g) >> 24) ^ ((g) >> 16) ^ ((g) >> 8) ^ (g)))
 #define XORBLEND(g) (((g) ^ ((g) >> 8)) ^ (((g) ^ ((g) >> 8)) >> 16))
@@ -29,20 +29,25 @@ static inline void gsrand(uint32_t g)
     gseed = g ? g : 1u;
 }
 
-static inline uint32_t grmod(uint32_t m)
+static inline uint8_t grmod(uint32_t m)
 {
     if(!m) return 0u;
-    uint32_t g = glcgforml(&gseed);
+    uint8_t g = grand();
 
     //  g ^= g >> 8;
     //  g ^= g >> 16;
 
-    return XORBLEND(g) % m;
+    return g % m;
 }
 
 static inline float grandf(void)
 {
-    return (float)grand() / 256.0f;
+    return (float)grand() / (float)LIMG;
+}
+
+static inline double grandd(void)
+{
+    return (double)grand() / (double)LIMG;
 }
 
 #endif
