@@ -65,6 +65,8 @@ void renderChars(sCreatureCoord &scc, sPlantsCoord &spc, MushroomCoord &m, const
                 std::cout << console::grey << "m " << console::reset;
             else if(i == m.mhy && j == m.mhx)
                 std::cout << console::purple << "m " << console::reset;
+            else if(i == scc.pyx1 && j == scc.pyy1)
+                std::cout << console::grey << "% " << console::reset;
             else 
                 std::cout << console::green << ". " << console::reset; 
         }
@@ -93,6 +95,7 @@ int main()
 
     PlayerRender rplayer(scc, sce, spc, m, grock);
     PreyRender0 prey0(spc, scc, sce, m, grock);
+    PreyRender1 prey1(spc, scc, sce, m, grock);
     PredatorRender0 pred0(scc, sce, spc, m, grock);
     SafePlant splants(scc, sce, spc);
     PoisonousPlant pplants(scc, sce, spc);
@@ -111,6 +114,7 @@ int main()
     scc.ply = HEIGHT / 2;
 
     prey0.creatureSpawn();
+    prey1.creatureSpawn();
     pred0.creatureSpawn();
 
     splants.spawnPlants();
@@ -130,10 +134,12 @@ int main()
         
         rplayer.creatureMove(getkeys());
         prey0.creatureMove(static_cast<int>(grmod(5)));
+        prey1.creatureMove(static_cast<int>(grmod(5)));
         pred0.creatureMove(static_cast<int>(grmod(4)));
 
         rplayer.creatureEat();
         prey0.eat();
+        prey1.eat();
         pred0.creatureEat();
         rplayer.playerLowEnerg();
 

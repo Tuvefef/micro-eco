@@ -8,6 +8,8 @@ struct sCreatureCoord
 
     int pyx0;
     int pyy0;
+    int pyx1;
+    int pyy1;
 
     int prx0;
     int pry0;

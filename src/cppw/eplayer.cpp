@@ -35,11 +35,13 @@ void PlayerRender::creatureMove(incvar inc)
 
 void PlayerRender::creatureEat()
 {
-    PreyRender0 rprey(spc, scc, sce, m, grock);
-    if(scc.plx == scc.pyx0 && scc.ply == scc.pyy0)
+    PreyRender0 rprey0(spc, scc, sce, m, grock);
+    PreyRender1 rprey1(spc, scc, sce, m, grock);
+    if((scc.plx == scc.pyx0 && scc.ply == scc.pyy0) || (scc.plx == scc.pyx1 && scc.ply == scc.pyy1))
     {
-        sce.generg += 15;
-        rprey.creatureSpawn();
+        sce.generg += 18;
+        rprey0.creatureSpawn();
+        rprey1.creatureSpawn();
     }
 }
 
