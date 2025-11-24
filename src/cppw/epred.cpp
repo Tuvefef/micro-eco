@@ -11,12 +11,46 @@ void PredatorRender0::creatureMove(incvar inc)
     float dy1 = scc.ply - scc.pry0;
     float dx2 = scc.pyx0 - scc.prx0;
     float dy2 = scc.pyy0 - scc.pry0;
+    float dx3 = scc.pyx1 - scc.prx0;
+    float dy3 = scc.pyy1 - scc.pry0; 
 
     float gcoord1 = gpowx2(dx1) + gpowx2(dy1);
     float gcoord2 = gpowx2(dx2) + gpowx2(dy2);
+    float gcoord3 = gpowx2(dx3) + gpowx2(dy3);
 
-    float gtargx = (gcoord1 < gcoord2) ? scc.plx : scc.pyx0;
-    float gtargy = (gcoord1 < gcoord2) ? scc.ply : scc.pyy0;
+    float minCoord = gcoord1;
+    int targIndex  = 1;
+
+    if(gcoord2 < minCoord)
+    {
+        minCoord = gcoord2;
+        targIndex = 2;
+    }
+
+    if(gcoord3 < minCoord)
+    {
+        minCoord = gcoord3;
+        targIndex = 3;
+    }
+
+    float gtargx;
+    float gtargy;
+
+    switch(targIndex)
+    {
+        case 1:
+            gtargx = scc.plx;
+            gtargy = scc.ply;
+            break;
+        case 2:
+            gtargx = scc.pyx0;
+            gtargy = scc.pyy0;
+            break;
+        case 3:
+            gtargx = scc.pyx1;
+            gtargy = scc.pyy1;
+            break;
+    }
 
     int newX = scc.prx0;
     int newY = scc.pry0;
@@ -69,9 +103,7 @@ void PredatorRender0::creatureMove(incvar inc)
     newX = maxn(0, minn(WIDTH - 1, newX));
     newY = maxn(0, minn(HEIGHT - 1, newY));
 
-    if(std::none_of(grock.begin(), grock.end(), [&](RocksCoord r){
-        return r.rx == newX && r.ry == newY;
-    }))
+    if(!ROCKMAP[newX][newY])
     {
         scc.prx0 = newX;
         scc.pry0 = newY;
@@ -82,12 +114,15 @@ void PredatorRender0::creatureMove(incvar inc)
 void PredatorRender0::creatureEat()
 {
     PreyRender0 prey0(spc, scc, sce, m, grock);
-    if((scc.prx0 == scc.plx && scc.pry0 == scc.ply) || 
-    (scc.prx0 == scc.pyx0 && scc.pry0 == scc.pyy0))
+    PreyRender1 prey1(spc, scc, sce, m, grock);
+    if((scc.prx0 == scc.pyx0 && scc.pry0 == scc.pyy0) ||
+       (scc.prx0 == scc.pyx1 && scc.pry0 == scc.pyy1) ||
+       (scc.prx0 == scc.plx  && scc.pry0 == scc.ply))
     {
-        sce.generg -= 5;
+        sce.generg -= 10;
         prey0.creatureSpawn();
-    } 
+        prey1.creatureSpawn();
+    }
 }
 
 void PredatorRender0::creatureSpawn()

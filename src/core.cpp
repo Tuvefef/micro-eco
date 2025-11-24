@@ -77,8 +77,17 @@ void renderChars(sCreatureCoord &scc, sPlantsCoord &spc, MushroomCoord &m, const
 void renderRocks(std::vector<RocksCoord> &grock, int x, int y)
 {
     for(int i = 0; i < 2; i++)
+    {
         for(int j = 0; j < 2; j++)
-            grock.push_back({x + i, y + j});
+        {
+            int gx = x + i;
+            int gy = y + j;
+
+            grock.push_back({gx, gy});
+            ROCKMAP[gx][gy] = true;
+        }
+    }
+        
 }
 
 int main()
@@ -126,7 +135,7 @@ int main()
 
     for(int i = 0; i < TICKS; i++)
     {
-        std::cout << console::consoleClean;
+        std::cout << console::consoleClean << std::flush;
         std::cout << "ticks: " << i << std::endl;
         std::cout << "energy: " << sce.generg << std::endl;
         

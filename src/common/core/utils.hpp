@@ -3,8 +3,9 @@
 
 #include <variant>
 
-constexpr int WIDTH = 12;
-constexpr int HEIGHT = 12;
+constexpr int WIDTH = 14;
+constexpr int HEIGHT = 14;
+inline bool ROCKMAP[WIDTH][HEIGHT] = {false};
 
 constexpr unsigned int TICKS = 500;
 constexpr unsigned int PLAYERENERG = 50;

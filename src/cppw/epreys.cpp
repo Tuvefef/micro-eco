@@ -92,12 +92,12 @@ void PreyRender1::creatureMove(incvar inc)
     float minCoord = gcoord1;
     int targIndex  = 1;
 
-    if (gcoord2 < minCoord) {
+    if(gcoord2 < minCoord) {
         minCoord = gcoord2;
         targIndex = 2;
     }
 
-    if (gcoord3 < minCoord) {
+    if(gcoord3 < minCoord) {
         minCoord = gcoord3;
         targIndex = 3;
     }
@@ -105,7 +105,7 @@ void PreyRender1::creatureMove(incvar inc)
     float gtargx;
     float gtargy;
 
-    switch (targIndex)
+    switch(targIndex)
     {
         case 1:
             gtargx = scc.pyx0;
@@ -172,15 +172,10 @@ void PreyRender1::creatureMove(incvar inc)
         else if(gnewy > gtargy) gnewy--;
     }
 
-    scc.pyx0 = maxn(0, minn(WIDTH  - 1, gnewx));
-    scc.pyy0 = maxn(0, minn(HEIGHT - 1, gnewy));
-
-    if(std::none_of(grock.begin(), grock.end(), [&](RocksCoord r){
-        return r.rx == gnewx && r.ry == gnewy;
-    }))
+    if(!ROCKMAP[gnewx][gnewy])
     {
-        scc.pyx1 = gnewx;
-        scc.pyy1 = gnewy;
+        scc.pyx1 = maxn(0, minn(WIDTH  - 1, gnewx));
+        scc.pyy1 = maxn(0, minn(HEIGHT - 1, gnewy));
     }
 }
 
@@ -224,7 +219,7 @@ void PreyRender1::eat()
     ToxicMushroom tm(scc, sce, m, grock);
 
     if(
-        (scc.pyx1 == scc.pyx0 && scc.pyx1 == scc.pyy0) ||
+        (scc.pyx1 == scc.pyx0 && scc.pyy1 == scc.pyy0) ||
         (scc.pyx1 == m.msx && scc.pyy1 == m.msy)       ||
         (scc.pyx1 == m.mtx && scc.pyy1 == m.mty)
     )

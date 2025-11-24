@@ -24,9 +24,7 @@ void PlayerRender::creatureMove(incvar inc)
     newX = maxn(0, minn(WIDTH - 1, newX));
     newY = maxn(0, minn(HEIGHT - 1, newY));
 
-    if(std::none_of(grock.begin(), grock.end(), [&](RocksCoord r){
-        return r.ry == newY && r.rx == newX;
-    }))
+    if(!ROCKMAP[newX][newY])
     {
         scc.plx = newX;
         scc.ply = newY;
@@ -47,7 +45,7 @@ void PlayerRender::creatureEat()
 
 int PlayerRender::playerLowEnerg() const
 {
-    return sce.generg--;
+    return --sce.generg;
 }
 
 int PlayerRender::playerDead() const
