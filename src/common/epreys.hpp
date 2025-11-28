@@ -14,6 +14,7 @@ class PreyRender0 : public CreatureMove, public SpawnCreature
         
         int stimer;
         bool isChasing;
+        bool isEscaping;
         int chaseTimer;
     public:
         void creatureMove(incvar inc) override;

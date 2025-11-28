@@ -4,7 +4,7 @@
 #include "../common/eplant.hpp"
 
 PreyRender0::PreyRender0(sPlantsCoord &spcref, sCreatureCoord &sccref, sCreatureEnergy &sceref, MushroomCoord &mref, std::vector<RocksCoord> &rref) : 
-    spc(spcref), scc(sccref), sce(sceref), m(mref), stimer(0), isChasing(false), chaseTimer(0), grock(rref)
+    spc(spcref), scc(sccref), sce(sceref), m(mref), stimer(0), isChasing(false), chaseTimer(0), grock(rref), isEscaping(false)
 {}
 
 PreyRender1::PreyRender1(sPlantsCoord &spcref, sCreatureCoord &sccref, sCreatureEnergy &sceref, MushroomCoord &mref, std::vector<RocksCoord> &rref) :
@@ -13,66 +13,61 @@ PreyRender1::PreyRender1(sPlantsCoord &spcref, sCreatureCoord &sccref, sCreature
 
 void PreyRender0::creatureMove(incvar inc)
 {
-    float gdx1 = scc.pyx0 - spc.psx;
-    float gdy1 = scc.pyy0 - spc.psy;
-    float gdx2 = scc.pyx0 - m.msx;
-    float gdy2 = scc.pyy0 - m.msy;
+    isEscaping = areNear(scc.plx, scc.ply, scc.pyx0, scc.pyy0, 2);
 
-    float gcoord1 = gpowx2(gdx1) + gpowx2(gdy1);
-    float gcoord2 = gpowx2(gdx2) + gpowx2(gdy2);
+    float dx1 = scc.pyx0 - spc.psx;
+    float dy1 = scc.pyy0 - spc.psy;
+    float dx2 = scc.pyx0 - m.msx;
+    float dy2 = scc.pyy0 - m.msy;
 
-    float gtargx = (gcoord1 < gcoord2) ? spc.psx : m.msx;
-    float gtargy = (gcoord1 < gcoord2) ? spc.psy : m.msy;
+    float d1 = gpowx2(dx1) + gpowx2(dy1);
+    float d2 = gpowx2(dx2) + gpowx2(dy2);
 
-    if (isChasing)
+    float targetX = (d1 < d2) ? spc.psx : m.msx;
+    float targetY = (d1 < d2) ? spc.psy : m.msy;
+
+    if(isEscaping)
+    {
+        int dplx = scc.pyx0 - scc.plx;
+        int dply = scc.pyy0 - scc.ply;
+
+        if     (dplx < 0) scc.pyx0--;  
+        else if(dplx > 0) scc.pyx0++;
+
+        if     (dply < 0) scc.pyy0--; 
+        else if(dply > 0) scc.pyy0++;
+    }
+    else if(isChasing)
     {
         chaseTimer++;
-        if (chaseTimer >= 10)
+        if(chaseTimer >= 10)
         {
             isChasing = false;
             chaseTimer = 0;
         }
-    } else {
-        if (++stimer > (15 + grmod(10))) 
-        { 
-            stimer = 0; 
-            if (grmod(100) < 16) 
-            {
-                isChasing = true; 
-                chaseTimer = 0;
-            }
-        }
+
+        if     (scc.pyx0 < targetX) scc.pyx0++;
+        else if(scc.pyx0 > targetX) scc.pyx0--;
+
+        if     (scc.pyy0 < targetY) scc.pyy0++;
+        else if(scc.pyy0 > targetY) scc.pyy0--;
     }
-    
-    if(!(isChasing))
+    else
     {
         if(std::holds_alternative<int>(inc))
         {
             int coord = std::get<int>(inc);
             switch (coord)
             {
-                case 0: scc.pyy0--;
-                    break;
-                case 1: scc.pyy0++;
-                    break;
-                case 2: scc.pyx0--;
-                    break;
-                case 3: scc.pyx0++;
-                    break;
-        
-                default:
-                    break;
+                case 0: scc.pyy0--; break;
+                case 1: scc.pyy0++; break; 
+                case 2: scc.pyx0--; break;
+                case 3: scc.pyx0++; break;
             }
         }
-    } else {
-        if     (scc.pyx0 < gtargx) scc.pyx0++;
-        else if(scc.pyx0 > gtargx) scc.pyx0--;
-
-        if     (scc.pyy0 < gtargy) scc.pyy0++;
-        else if(scc.pyy0 > gtargy) scc.pyy0--;
     }
 
-    scc.pyx0 = maxn(0, minn(WIDTH - 1, scc.pyx0));
+    scc.pyx0 = maxn(0, minn(WIDTH  - 1, scc.pyx0));
     scc.pyy0 = maxn(0, minn(HEIGHT - 1, scc.pyy0));
 }
 
@@ -92,12 +87,14 @@ void PreyRender1::creatureMove(incvar inc)
     float minCoord = gcoord1;
     int targIndex  = 1;
 
-    if(gcoord2 < minCoord) {
+    if(gcoord2 < minCoord) 
+    {
         minCoord = gcoord2;
         targIndex = 2;
     }
 
-    if(gcoord3 < minCoord) {
+    if(gcoord3 < minCoord) 
+    {
         minCoord = gcoord3;
         targIndex = 3;
     }
@@ -126,7 +123,7 @@ void PreyRender1::creatureMove(incvar inc)
     int gnewx = scc.pyx1;
     int gnewy = scc.pyy1;
 
-    if (isChasing)
+    if(isChasing)
     {
         chaseTimer++;
         if (chaseTimer >= 10)
@@ -137,7 +134,7 @@ void PreyRender1::creatureMove(incvar inc)
     } 
     else 
     {
-        if (++stimer > (15 + grmod(10))) 
+        if(++stimer > (15 + grmod(10))) 
         { 
             stimer = 0; 
             if (grmod(100) < 16) 
@@ -148,12 +145,12 @@ void PreyRender1::creatureMove(incvar inc)
         }
     }
 
-    if (!isChasing)
+    if(!isChasing)
     {
-        if (std::holds_alternative<int>(inc))
+        if(std::holds_alternative<int>(inc))
         {
             int coord = std::get<int>(inc);
-            switch (coord)
+            switch(coord)
             {
                 case 0: gnewy--; break;
                 case 1: gnewy++; break;

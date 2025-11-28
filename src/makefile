@@ -6,7 +6,7 @@ all: eco
 eco:
 	$(CPP) $(SOURCES) -o $(BIN)
 
-run:
+run: 
 	./$(BIN)
 
 clean:
